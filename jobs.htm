@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet"/>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.8.1/bootstrap-table.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.8.1/bootstrap-table.min.js"></script>
+
+	<script>
+		//fetch details from table row selected
+		var checkedRows = [];
+		console.log(checkedRows);
+
+		$('#eventsTable').on('check.bs.table', function (e, row) {
+		  checkedRows.push({id: row.id, name: row.name, forks: row.forks});
+		  console.log(checkedRows);
+		});
+
+		$('#eventsTable').on('uncheck.bs.table', function (e, row) {
+		  $.each(checkedRows, function(index, value) {
+			if (value.id === row.id) {
+			  checkedRows.splice(index,1);
+			}
+		  });
+		console.log(checkedRows);
+		});
+
+		$("#add_cart").click(function() {
+		  console.log("b");
+		  $("#output").empty();
+		  console.log(checkedRows);
+		  $.each(checkedRows, function(index, value) {
+			$('#output').append($('<li></li>').text(value.id + " | " + value.name + " | " + value.forks));
+		  });
+		});		
+	</script>
+	<script>
+	$(function () {
+    var $result = $('#eventsResult');
+
+    $('#eventsTable').on('all.bs.table', function (e, name, args) {
+        console.log('Event:', name, ', data:', args);
+    })
+    .on('click-row.bs.table', function (e, row, $element) {
+        $result.text('Event: click-row.bs.table');
+    })
+    .on('dbl-click-row.bs.table', function (e, row, $element) {
+        $result.text('Event: dbl-click-row.bs.table');
+    })
+    .on('sort.bs.table', function (e, name, order) {
+        $result.text('Event: sort.bs.table');
+    })
+    .on('check.bs.table', function (e, row) {
+        $result.text('Event: check.bs.table');
+    })
+    .on('uncheck.bs.table', function (e, row) {
+        $result.text('Event: uncheck.bs.table');
+    })
+    .on('check-all.bs.table', function (e) {
+        $result.text('Event: check-all.bs.table');
+    })
+    .on('uncheck-all.bs.table', function (e) {
+        $result.text('Event: uncheck-all.bs.table');
+    })
+    .on('load-success.bs.table', function (e, data) {
+        $result.text('Event: load-success.bs.table');
+    })
+    .on('load-error.bs.table', function (e, status) {
+        $result.text('Event: load-error.bs.table');
+    })
+    .on('column-switch.bs.table', function (e, field, checked) {
+        $result.text('Event: column-switch.bs.table');
+    })
+    .on('page-change.bs.table', function (e, size, number) {
+        $result.text('Event: page-change.bs.table');
+    })
+    .on('search.bs.table', function (e, text) {
+        $result.text('Event: search.bs.table');
+    });
+});
+</script>
+
+</head>
+
+<body>
+	<h2>Open Jobs</h2>
+
+<!-- <table id="eventsTable"
+       data-toggle="table"
+       data-height="300"
+       data-url="https://api.github.com/users/wenzhixin/repos?type=owner&sort=full_name&direction=asc&per_page=100&page=1"
+       data-pagination="true"
+       data-search="true"
+       data-show-refresh="true"
+       data-show-toggle="true"
+       data-show-columns="true"
+       data-toolbar="#toolbar">
+    <thead>
+    <tr>
+        <th data-field="state" data-checkbox="true"></th>
+        <th data-field="name">Name</th>
+        <th data-field="stargazers_count">Stars</th>
+        <th data-field="forks_count">Forks</th>
+        <th data-field="description">Description</th>
+    </tr>
+    </thead>
+</table> -->
+
+<div class="alert alert-success" id="eventsResult">
+    Here is the result of event.
+</div>
+<table id="eventsTable"
+       data-toggle="table"
+       data-height="300"
+       data-url="https://api.github.com/users/wenzhixin/repos?type=owner&sort=full_name&direction=asc&per_page=100&page=1"
+       data-pagination="true"
+       data-search="true"
+       data-show-refresh="true"
+       data-show-toggle="true"
+       data-show-columns="true"
+       data-toolbar="#toolbar">
+    <thead>
+    <tr>
+        <th data-field="state" data-checkbox="true"></th>
+        <th data-field="name">Name</th>
+        <th data-field="stargazers_count">Stars</th>
+        <th data-field="forks_count">Forks</th>
+        <th data-field="description">Description</th>
+    </tr>
+    </thead>
+</table>
+
+
+<button id="add_cart">Add to card</button>
+<ul id="output"></ul>
+					
+</body>
+</html>

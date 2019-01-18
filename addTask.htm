@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Cavion</title>
+	</head>
+	<body>
+		<h2>Add a Task</h2> 
+		<form action = "http://127.0.0.1:8081/addTask" method = "POST">
+			Job ID: <input type = "text" name = "jobId"> <br>
+			ID of the Tech: <input type = "text" name = "personId"> <br>
+			Start Date (needs to be yyyymmdd hhmmss format: <input type = "text" name = "startDate"> <br>
+			End Date: <input type = "text" name = "endDate"> <br>
+			Comments: <input type = "text" name = "comments"> <br>
+
+			<input type = "submit" value = "Add Task">
+		</form>
+	</body>
+</html>
