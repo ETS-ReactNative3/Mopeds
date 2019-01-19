@@ -4,16 +4,15 @@ This project uses a local mysql connection on 3306
 Usage: 
 https://localhost/index2.htm (index.htm has unit testing forms)
 
-index.htm redirects to /index.htm
-addCustomer.htm is the form for creating a customer row in the db
+addCustomer.htm is the test form for creating a customer row in the db
 
 Routers: 
 /customers
-shows all the customers
+shows all the customers, returns json
 
 /customer
-shows one customer, parm: idCust
-
+accepts parameters to edit or view one customer, parm: custId
+post is: /customers&action=edit
 
 
 /jobs

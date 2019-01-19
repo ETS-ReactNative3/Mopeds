@@ -324,8 +324,6 @@ app.post('/process_post', urlencodedParser, function (req, res) {
 })
 
 var https = require('https');
-/*https.createServer(options, app).listen(443);
-*/
 
 var options = {
   key: fs.readFileSync('key.pem'),
@@ -333,24 +331,3 @@ var options = {
 };
 https.createServer(options, app).listen(443); 
 
-/*
-var server = app.listen(8081, function () {
-   var host = server.address().address
-   var port = server.address().port
-     
-   console.log("listening at http://%s:%s", host, port)
-}) */
-
-/* var server = app.listen(8081, function () {
-   var host = server.address().address
-   var port = server.address().port
-     
-   console.log("listening at http://%s:%s", host, port)
-}) */
-
-/* var https = require('https');
-https.createServer(function (req, res) {
-  res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.write('Hello World!');
-  res.end();
-}).listen(8081); */
