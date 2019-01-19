@@ -1,10 +1,10 @@
 var express = require('express');
 var app = express();
+require('dotenv').config()
 var bodyParser = require('body-parser');
 var mysql = require('mysql');
 var urlencodedParser = bodyParser.urlencoded({extended: false })
 var dateFormat = require('dateformat');
-var env = 'debug';
 var fs = require('fs');
 
 app.use(express.static(__dirname + '/public'));
@@ -12,10 +12,10 @@ app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 var con = mysql.createConnection({ 
-  host: "localhost",
-  user: "dbuser",
-  password: "55solutions",
-  database: "cavion"
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PWD,
+  database: process.env.DB_NAME
 });
 
 con.connect(function(err) {
@@ -54,7 +54,7 @@ app.get('/customers', function(req,res) {
 		var sql = 'SELECT * FROM customers';
 		con.query(sql, function (err, result) {
 			if (err) throw err;
-		if (env === 'debug') console.log(result);
+		if (process.env.ENV === 'debug') console.log(result);
 		res.end(JSON.stringify(result));
 		});
 	});
@@ -63,7 +63,7 @@ app.get('/jobs', function(req,res) {
 		var sql = 'SELECT * FROM jobs';
 		con.query(sql, function (err, result) {
 			if (err) throw err;
-		if (env === 'debug') console.log(result);
+		if (process.env.ENV === 'debug') console.log(result);
 		res.end(JSON.stringify(result));
 		});
 	});	
@@ -89,7 +89,7 @@ app.put('/tasks', function(req,res) {
 				now + "')";  
 			con.query(sql, function (err, result) {
 				if (err) throw err;
-				if (env === 'debug') console.log(result);
+				if (process.env.ENV === 'debug') console.log(result);
 				res.end(JSON.stringify(result));
 			});
 		};
@@ -118,13 +118,13 @@ app.put('/tasks', function(req,res) {
 			// the second update sql. 
 			getInfo(sql, function(result){
 				idForUpdate = result;
-				if (env == "debug") console.log("idForUpdate: " + idForUpdate);
+				if (process.env.ENV == "debug") console.log("idForUpdate: " + idForUpdate);
 				var clause = 'idTasks = ' + idForUpdate;
 				var sql = 'UPDATE tasks SET endDate ="'+ now + '" WHERE ' + clause;
 				
 				con.query(sql, function (err, result) {
 					if (err) throw err;
-					if (env === 'debug') console.log(sql, result);
+					if (process.env.ENV === 'debug') console.log(sql, result);
 					res.end(JSON.stringify(result));
 				});
 			});
@@ -141,11 +141,11 @@ app.put('/tasks', function(req,res) {
 		
 app.post('/jobsByCustomer', function(req,res) {
 	  	var id = req.body.custId;
-		if (env === 'debug') console.log(req.body.custId);
+		if (process.env.ENV === 'debug') console.log(req.body.custId);
 		var sql = 'SELECT * FROM jobs WHERE idJobs = ' + mysql.escape(id);
 		con.query(sql, function (err, result) {
 			if (err) throw err;
-			if (env === 'debug') console.log(result);
+			if (process.env.ENV === 'debug') console.log(result);
 			res.end(JSON.stringify(result));
 		});
 	});
@@ -174,7 +174,7 @@ app.post('/addCustomer', function(req,res) {
 			mysql.escape(custZ) + ")"; 
 		con.query(sql, function (err, result) {
 			if (err) throw err;
-			if (env === 'debug') console.log(result);
+			if (process.env.ENV === 'debug') console.log(result);
 			res.end(JSON.stringify(result));
 		});
 });	
@@ -202,10 +202,10 @@ app.post('/customer', function(req,res) {
 				", zip = " + mysql.escape(custZip) +
 				" WHERE IDCUSTOMERS = " + 
 				mysql.escape(custId);
-			if (env === 'debug') console.log(sql);
+			if (process.env.ENV === 'debug') console.log(sql);
 			con.query(sql, function (err, result) {
 				if (err) throw err;
-				if (env === 'debug') console.log(result);
+				if (process.env.ENV === 'debug') console.log(result);
 				res.end(JSON.stringify(result));
 			});
 		}
@@ -214,11 +214,11 @@ app.post('/customer', function(req,res) {
 		// as is, a null parm list will display the cust detail
 		else {
 			var id = req.body.custId;
-			if (env === 'debug') console.log(req.body.custId);
+			if (process.env.ENV === 'debug') console.log(req.body.custId);
 			var sql = 'SELECT * FROM customers WHERE idCustomers = ' + mysql.escape(id);
 			con.query(sql, function (err, result) {
 				if (err) throw err;
-				if (env === 'debug') console.log(result);
+				if (process.env.ENV === 'debug') console.log(result);
 				res.end(JSON.stringify(result));
 			});
 		}
@@ -255,7 +255,7 @@ app.post('/addPartToJob', function(req,res) {
 		console.log(sql);
 			con.query(sql, function (err, result) {
 				if (err) throw err;
-				if (env === 'debug') console.log(result);
+				if (process.env.ENV === 'debug') console.log(result);
 				res.end(JSON.stringify(result));
 			});			
 		}
@@ -268,7 +268,7 @@ app.post('/addJob', function(req,res) {
 	  	var jDesc = req.body.jobDesc;
 	  	var pId = req.body.personId;
 		
-		if (env === 'debug') console.log(req.body.custLN);
+		if (process.env.ENV === 'debug') console.log(req.body.custLN);
 		
 		var sql = "INSERT INTO JOBS " +
 			" (idCustomers, " + 
@@ -281,7 +281,7 @@ app.post('/addJob', function(req,res) {
 
 		con.query(sql, function (err, result) {
 			if (err) throw err;
-			if (env === 'debug') console.log(result);
+			if (process.env.ENV === 'debug') console.log(result);
 			res.end(JSON.stringify(result));
 		});
 
@@ -293,7 +293,7 @@ app.post('/addTask', function(req,res) {
 		var sDate = req.body.startDate;
 		var eDate = req.body.endDate;
 		
-		if (env === 'debug') console.log(req.body.custLN);
+		if (process.env.ENV === 'debug') console.log(req.body.custLN);
 		
 		var sql = "INSERT INTO TASKS " +
 			" (idJobs, " + 
@@ -306,10 +306,10 @@ app.post('/addTask', function(req,res) {
 			mysql.escape(sDate) + "," +
 			mysql.escape(eDate) + ")"; 
 
-		if (env === 'debug') console.log(sql);
+		if (process.env.ENV === 'debug') console.log(sql);
 		con.query(sql, function (err, result) {
 			if (err) throw err;
-			if (env === 'debug') console.log(result);
+			if (process.env.ENV === 'debug') console.log(result);
 			res.end(JSON.stringify(result));
 		});
 

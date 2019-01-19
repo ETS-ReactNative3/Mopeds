@@ -2,7 +2,7 @@ Database:
 This project uses a local mysql connection on 3306
 
 Usage: 
-http://localhost:8081
+https://localhost/index2.htm (index.htm has unit testing forms)
 
 index.htm redirects to /index.htm
 addCustomer.htm is the form for creating a customer row in the db
