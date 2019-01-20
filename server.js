@@ -8,7 +8,7 @@ var dateFormat = require('dateformat');
 var fs = require('fs');
 
 app.use(express.static(__dirname + '/public'));
-app.use(express.static(__dirname + '/libraries/'));
+app.use(express.static('libraries'));
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
