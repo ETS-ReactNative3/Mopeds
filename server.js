@@ -8,6 +8,7 @@ var dateFormat = require('dateformat');
 var fs = require('fs');
 
 app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/libraries/'));
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
@@ -49,6 +50,9 @@ app.get('/addTask.htm', function(req,res) {
 })
 app.get('/qr.html', function(req,res) {
 	res.sendFile(__dirname + "/" + "qr.html" );
+})
+app.get('/scan.html', function(req,res) {
+	res.sendFile(__dirname + "/" + "scan.html" );
 })
 app.post('/customers', function(req,res) {
 	var idC = req.body.idC;

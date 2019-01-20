@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>QR</title>
+		<script> 
+			const qrScanner = new QrScanner(videoElem, result => console.log('decoded qr code:', result));
+		
+			import QrScanner from "/libraries/qr-scanner.min.js";
+		
+		</script>
+			
+	</head>
+	<body>
+		<h2>Scan QR code</h2> 
+		<video></video>
+		<div>
+			<video muted playsinline id="qr-video"></video>
+			<canvas id="debug-canvas"></canvas>
+		</div>
+	</body>
+</html>
