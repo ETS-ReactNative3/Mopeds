@@ -50,8 +50,10 @@ app.get('/addTask.htm', function(req,res) {
 app.get('/qr.html', function(req,res) {
 	res.sendFile(__dirname + "/" + "qr.html" );
 })
-app.get('/customers', function(req,res) {
-	var sql = 'SELECT * FROM customers';
+app.post('/customers', function(req,res) {
+	var idC = req.body.idC;
+	console.log(idC);
+	var sql = 'SELECT * FROM customers where idC = ' + mysql.escape(idC);
 	con.query(sql, function (err, result) {
 		if (err) throw err;
 	if (process.env.ENV === 'debug') console.log(result);
@@ -140,9 +142,10 @@ app.put('/tasks', function(req,res) {
 });
 		
 app.post('/jobsByCustomer', function(req,res) {
-	  	var id = req.body.custId;
+	  	var idC = req.body.idC;
+		var id = req.body.custId;
 		if (process.env.ENV === 'debug') console.log(req.body.custId);
-		var sql = 'SELECT * FROM jobs WHERE idJobs = ' + mysql.escape(id);
+		var sql = 'SELECT * FROM jobs WHERE idC = ' + mysql.escape(idC) + ' and idCustomers = ' + mysql.escape(id);
 		con.query(sql, function (err, result) {
 			if (err) throw err;
 			if (process.env.ENV === 'debug') console.log(result);
@@ -151,6 +154,7 @@ app.post('/jobsByCustomer', function(req,res) {
 	});
 
 app.post('/addCustomer', function(req,res) {
+	var idC = req.body.idC;
 	var custLN = req.body.custLastName;
 	var custFN = req.body.custFirstName;
 	var custA = req.body.custAddress;
@@ -159,14 +163,16 @@ app.post('/addCustomer', function(req,res) {
 	var custZ = req.body.custZip;
 
 	var sql = "INSERT INTO CUSTOMERS " +
-		" (nameLast, " + 
+		" (idC, " +
+		" nameLast, " + 
 		" nameFirst, " +
 		" address, " +
 		" city, " +
 		" state, " +
 		" zip) " + 
 		" values " +  
-		" ( " + mysql.escape(custLN) + "," +
+		" ( " + mysql.escape(idC) + "," +
+		mysql.escape(custLN) + "," +
 		mysql.escape(custFN) + "," +
 		mysql.escape(custA) + "," +
 		mysql.escape(custC) + "," +
@@ -183,6 +189,7 @@ app.post('/customer', function(req,res) {
 // accept update to customer last name if action =edit, 
 // else show the cust details
 // post is: /customers&action=edit
+	var idC = req.body.idC;
 	var custId = req.body.custId;
 	var custFN = req.body.custFN;
 	var custLN = req.body.custLN;
@@ -194,14 +201,15 @@ app.post('/customer', function(req,res) {
 	if (req.query.action === "edit") {
 		
 		var sql = "UPDATE CUSTOMERS SET " +
-			" nameFirst = " + mysql.escape(custFN) +
+			" idC = " + mysql.escape(idC) +
+			", nameFirst = " + mysql.escape(custFN) +
 			", nameLast = " + mysql.escape(custLN) +
 			", address = " + mysql.escape(custAddr) +
 			", city = " + mysql.escape(custCity) +
 			", state = " + mysql.escape(custState) +
 			", zip = " + mysql.escape(custZip) +
-			" WHERE IDCUSTOMERS = " + 
-			mysql.escape(custId);
+			" WHERE IDC = " + mysql.escape(idC) +
+			" AND IDCUSTOMERS = " + mysql.escape(custId);
 		if (process.env.ENV === 'debug') console.log(sql);
 		con.query(sql, function (err, result) {
 			if (err) throw err;
@@ -213,9 +221,10 @@ app.post('/customer', function(req,res) {
 	// action=view paramater 
 	// as is, a null parm list will display the cust detail
 	else {
+		var idC = req.body.idC;
 		var id = req.body.custId;
 		if (process.env.ENV === 'debug') console.log(req.body.custId);
-		var sql = 'SELECT * FROM customers WHERE idCustomers = ' + mysql.escape(id);
+		var sql = 'SELECT * FROM customers WHERE idC = ' + mysql.escape(idC) + ' and idCustomers = ' + mysql.escape(id);
 		con.query(sql, function (err, result) {
 			if (err) throw err;
 			if (process.env.ENV === 'debug') console.log(result);
@@ -260,18 +269,19 @@ app.post('/addPartToJob', function(req,res) {
 });	
 
 app.post('/addJob', function(req,res) {
-	var cId = req.body.custId;
+	var idC = req.body.idC;
+	var custId = req.body.custId;
 	var jDesc = req.body.jobDesc;
 	var pId = req.body.personId;
 	
-	if (process.env.ENV === 'debug') console.log(req.body.custLN);
-	
 	var sql = "INSERT INTO JOBS " +
-		" (idCustomers, " + 
+		" (idC, " +
+		" idCustomers, " + 
 		" description, " +
 		" idPerson) " +
 		" values " + 
-		" ( " + mysql.escape(cId) + "," +
+		" ( " + mysql.escape(idC) + "," +
+		mysql.escape(custId) + "," +
 		mysql.escape(jDesc) + "," +
 		mysql.escape(pId) + ")"; 
 

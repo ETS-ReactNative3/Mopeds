@@ -4,34 +4,26 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-<!--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
--->
     <title>Cavion</title>
   </head>
 
    <body>
-      
-        Testing only, to be removed <br> 
-		<form action = "/process_post" method = "POST">
-           First Name: <input type = "text" name = "first_name">  <br>
-           Last Name: <input type = "text" name = "last_name">
-           <input type = "submit" value = "Submit">
-        </form>
-		
 		<h2>Select a particular customer</h2> 
 		<form action = "/customer" method = "POST">
+			Client ID: <input type = "text" name = "idC"> <br>
 			Customer ID: <input type = "text" name = "custId"> <br>
 			<input type = "submit" value = "Show One Customer">
 		</form>
 		
 		<h2> Show all customers </h2>
-		<form action = "/customers" method = "GET">
+		<form action = "/customers" method = "POST">
+			Client ID: <input type = "text" name = "idC"> <br>
 			<input type = "submit" value = "Show Customers">
 		</form>
 		
 		<h2> Edit one Customer </h2>
 		<form action = "/customer?action=edit" method = "POST">
+			Client ID: <input type = "text" name = "idC"> <br>
 			Customer ID: <input type = "text" name = "custId"> <br>
 			First Name: <input type = "text" name = "custFN"> <br>
 			Last Name: <input type = "text" name = "custLN"> <br>
@@ -49,6 +41,7 @@
 
 		<h2> Show jobs for one customer </h2>
 		<form action = "/jobsByCustomer" method = "POST">
+			Client ID: <input type = "text" name = "idC"> <br>
 			Jobs for Customer ID: <input type = "text" name = "custId"> <br>
 			<input type = "submit" value = "Show One Customer">
 		</form>
