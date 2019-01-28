@@ -27,15 +27,12 @@ con.connect(function (err) {
 
 app.get('/api/getUsername', (req, res) => res.send({ username: os.userInfo().username }));
 
-app.get('/', function (req, res) {
-	console.log('trying route: ', dirName, " + /index.htm");
-	res.sendFile(dirName + "/" + "index.htm");
-})
-
+/* 
 app.get('/index.htm', function (req, res) {
 	console.log('trying route 2: ', __dirname, " + /index.htm");
 	res.sendFile(__dirname + "/" + "index.htm");
 })
+*/
 
 app.get('/addCustomer.htm', function (req, res) {
 	res.sendFile(__dirname + "/" + "addCustomer.htm");
@@ -58,7 +55,7 @@ app.get('/api/customers', function (req, res) {
 	});
 });
 
-app.get('/jobs', function (req, res) {
+app.get('/api/jobs', function (req, res) {
 	const sql = 'SELECT * FROM jobs';
 	con.query(sql, function (err, result) {
 		if (err) throw err;

@@ -6,7 +6,7 @@ import './app.css';
 import Customers from './Customers';
 import Jobs from './Jobs';
 
-export const API = 'http://localhost:3000/api';
+export const API = '/api';
 
 export default class MomsBuickApp extends Component {
 
