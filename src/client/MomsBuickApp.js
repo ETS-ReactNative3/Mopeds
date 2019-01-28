@@ -28,6 +28,9 @@ export default class MomsBuickApp extends Component {
                   <li className="nav-item">
                     <Link to="/jobs" className="nav-link">Jobs</Link>
                   </li>
+                  <li className="nav-item">
+                    <Link to="/scan" className="nav-link">Scan</Link>
+                  </li>
                 </ul>
               </div>
             </nav>

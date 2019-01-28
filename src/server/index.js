@@ -1,4 +1,3 @@
-//jwm
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
@@ -318,13 +317,13 @@ app.post('/addTask', function (req, res) {
 
 });
 
-app.post('/process_post', urlencodedParser, function (req, res) {
+/*app.post('/process_post', urlencodedParser, function (req, res) {
 	response = {
 		first_name: req.body.first_name,
 		last_name: req.body.last_name
 	};
 	res.end(JSON.stringify(response));
-})
+})*/
 
 const server = app.listen(8081, function () {
 	const host = server.address().address
