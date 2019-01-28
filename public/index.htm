@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+<!--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+-->
+    <title>Marshall</title>
+  </head>
+
+   <body>
+      
+<!--        Testing only, to be removed <br> 
+		<form action = "http://127.0.0.1:8081/process_post" method = "POST">
+           First Name: <input type = "text" name = "first_name">  <br>
+           Last Name: <input type = "text" name = "last_name">
+           <input type = "submit" value = "Submit">
+        </form>-->
+		
+		<h2>Select a particular customer</h2> 
+		<form action = "http://127.0.0.1:8081/customer" method = "POST">
+			Customer ID: <input type = "text" name = "custId"> <br>
+			<input type = "submit" value = "Show One Customer">
+		</form>
+		
+		<h2> Show all customers </h2>
+		<form action = "http://127.0.0.1:8081/customers" method = "GET">
+			<input type = "submit" value = "Show Customers">
+		</form>
+		
+		<h2> Edit one Customer </h2>
+		<form action = "http://127.0.0.1:8081/customer?action=edit" method = "POST">
+			Customer ID: <input type = "text" name = "custId"> <br>
+			First Name: <input type = "text" name = "custFN"> <br>
+			Last Name: <input type = "text" name = "custLN"> <br>
+			Address: <input type = "text" name = "custAddr"> <br>
+			City: <input type = "text" name = "custC"> <br>
+			State: <input type = "text" name = "custS"> <br>
+			Zip: <input type = "text" name = "custZ"> <br>
+
+			
+			<small> This assumes the user views the customer first. For the update to work, 
+			all fields need to be passed to the api, otherwise the update will commit a null value. </small> </br>
+			<input type = "submit" value = "Edit Customer">
+		</form>
+		
+
+		<h2> Show jobs for one customer </h2>
+		<form action = "http://127.0.0.1:8081/jobsByCustomer" method = "POST">
+			Jobs for Customer ID: <input type = "text" name = "custId"> <br>
+			<input type = "submit" value = "Show One Customer">
+		</form>
+		
+		<h2> Show all jobs </h2>
+		<form action = "http://127.0.0.1:8081/jobs" method = "GET">
+			<input type = "submit" value = "Show Jobs">
+		</form>
+	
+		<h2> Add Customer </h2>
+		<a href="/addCustomer.htm"> Add Customer</a>
+			
+		<h2> Add Job </h2>
+		<a href="/addJob.htm"> Add Job</a>
+
+		<h2> Show Tasks for a Job </h2>
+		<a href="/showTasksForJob.htm"> Show Tasks for Job</a>
+			
+		<h2> Add Task </h2>
+		<a href="/addTask.htm"> Add Task for a Job</a>
+
+		
+
+		<h3>v1.0</h3>
+<!-- playing with bootstrap, removed for now. 	
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+-->
+
+   </body>
+</html>

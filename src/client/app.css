@@ -1,0 +1,12 @@
+header {
+  margin-bottom: 56px;
+}
+
+#content {
+  padding: 10px;
+}
+
+.loading {
+  opacity: .5;
+}
+
