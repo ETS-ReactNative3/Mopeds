@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './app.css';
 import Customers from './Customers';
 import Jobs from './Jobs';
+import Scan from './Scan';
 
 export const API = '/api';
 
@@ -38,6 +39,7 @@ export default class MomsBuickApp extends Component {
           <div id="content">
             <Route path="/customers" component={Customers} />
             <Route path="/jobs" component={Jobs} />
+            <Route path="/scan" component={Scan} />
           </div>
           <footer>
             <p><a href="/public/index.htm">Original Test Page</a></p>
