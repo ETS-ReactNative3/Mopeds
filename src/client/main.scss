@@ -1,0 +1,73 @@
+// @import "custom";
+// $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
+@import "~bootstrap/scss/bootstrap";
+
+header {
+  padding-bottom: 80px;
+}
+
+.loading {
+  opacity: .5;
+}
+
+/* Headers */
+.section-header {
+   a.back {
+    margin-left: -24px;
+    color: #bbb;
+  }
+  a.back:hover {
+    color: #888;
+  }
+
+  .header-button {
+    height: 3.4em;
+    display:flex;
+    align-items:center; /* vertically aligned! */
+    justify-content: center;
+  }
+
+  @media (max-width: 576px) {
+    h1 {
+      font-size: 2em;
+    }
+    a.back {
+      margin-left: -8px;
+    }
+  }
+}
+
+/* Table */
+.row-click:hover {
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, .05);
+}
+.row-click:active {
+  cursor: pointer;
+  background-color: rgba(50, 250, 50, .1);
+}
+
+/* Forms */
+form {
+  padding: 25px !important;
+  background-color: #eee;
+}
+
+
+/* Buttons */
+.button-group {
+  margin-top: 1em;
+  button {
+    margin-right: 1em;
+  }
+}
+
+@media (max-width: 576px) {
+  .button-group {
+    margin-bottom: 1em;
+    button {
+      width: 100%;
+      margin: .4em 0 0;
+      }
+  }
+}

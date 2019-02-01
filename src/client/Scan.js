@@ -64,6 +64,7 @@ export default class Scan extends Component {
         // render Scan - define video element & attach reference object
         return (
             <div>
+                <SectionHeader title="Scan" />
                 <video ref={this.videoElem}></video>
                 <button onClick={() => this.sendCodeScan('idc=2&techId=3&jobId=4')}>Send Test</button>
             </div>

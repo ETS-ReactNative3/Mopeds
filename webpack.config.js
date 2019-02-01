@@ -5,7 +5,11 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const outputDirectory = 'dist';
 
 module.exports = {
-  entry: ['babel-polyfill', './src/client/index.js'],
+  entry: [
+    'babel-polyfill',
+    './src/client/main.scss',
+    './src/client/index.js'
+  ],
   output: {
     path: path.join(__dirname, outputDirectory),
     filename: 'bundle.js'
@@ -26,6 +30,25 @@ module.exports = {
       {
         test: /\.(png|woff|woff2|eot|ttf|svg)$/,
         loader: 'url-loader?limit=100000'
+      },
+      {
+        test: /\.(scss)$/,
+        use: [{
+          loader: 'style-loader', // inject CSS to page
+        }, {
+          loader: 'css-loader', // translates CSS into CommonJS modules
+        }, {
+          loader: 'postcss-loader', // Run postcss actions
+          options: {
+            plugins: function () { // postcss plugins, can be exported to postcss.config.js
+              return [
+                require('autoprefixer')
+              ];
+            }
+          }
+        }, {
+          loader: 'sass-loader' // compiles Sass to CSS
+        }]
       }
     ]
   },

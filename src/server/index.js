@@ -178,19 +178,19 @@ app.post('/api/addCustomer', function (req, res) {
 	});
 });
 
-app.post('/customer', function (req, res) {
+app.post('/api/customer', function (req, res) {
 	// accept update to customer last name if action =edit, 
 	// else show the cust details
 	// post is: /customers&action=edit
-	const custId = req.body.custId;
-	const custFN = req.body.custFN;
-	const custLN = req.body.custLN;
-	const custAddr = req.body.custAddr;
-	const custCity = req.body.custC;
-	const custState = req.body.custS;
-	const custZip = req.body.custZ;
+	const custId = req.body.customerId;
+	const custLN = req.body.custLastName;
+	const custFN = req.body.custFirstName;
+	const custAddr = req.body.custAddress;
+	const custCity = req.body.custCity;
+	const custState = req.body.custState;
+	const custZip = req.body.custZip;
 
-	if (req.query.action === "edit") {
+	if (req.body.action === "edit") {
 
 		const sql = "UPDATE CUSTOMERS SET " +
 			" nameFirst = " + mysql.escape(custFN) +
@@ -212,7 +212,7 @@ app.post('/customer', function (req, res) {
 	// action=view paramater 
 	// as is, a null parm list will display the cust detail
 	else {
-		const id = req.body.custId;
+		const id = req.query.custId;
 		if (env === 'debug') console.log(req.body.custId);
 		const sql = 'SELECT * FROM customers WHERE idCustomers = ' + mysql.escape(id);
 		con.query(sql, function (err, result) {
@@ -222,6 +222,17 @@ app.post('/customer', function (req, res) {
 		});
 	}
 
+});
+
+app.get('/api/customer', function (req, res) {
+	const id = req.query.custId;
+	if (env === 'debug') console.log(req.body.custId);
+	const sql = 'SELECT * FROM customers WHERE idCustomers = ' + mysql.escape(id);
+	con.query(sql, function (err, result) {
+		if (err) throw err;
+		if (env === 'debug') console.log(result);
+		res.end(JSON.stringify(result));
+	});
 });
 
 app.post('/addPartToJob', function (req, res) {

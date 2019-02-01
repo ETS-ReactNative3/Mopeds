@@ -1,24 +1,34 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
+import { withRouter } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowAltCircleLeft } from '@fortawesome/free-solid-svg-icons';
 
-export default class SectionHeader extends Component {
+class SectionHeader extends Component {
+
+  goBack(e) {
+    e.preventDefault();
+    this.props.history.goBack();
+  }
 
   render() {
     const { title, hasBack = false, button } = this.props;
     return (
-      <div className="container">
+      <div className="section-header mb-2">
         <div className="row">
-          <div className="col-sm">
+          <div className="col-sm-8 col-md-9">
             <h1>
               {hasBack &&
-                <Link className="back" to="/">&lt; &lt;</Link>
+                <a href="#" className="back mr-3" onClick={e => this.goBack(e)}>
+                  <FontAwesomeIcon icon={faArrowAltCircleLeft} size="sm" />
+                </a>
               }
               {title}
             </h1>
           </div>
           {button &&
-            <div className="col-sm text-right">
-              <button className="btn btn-secondary" onClick={button.action}>{button.title}</button>
+            <div className="header-button col-sm-4 col-md-3">
+              <button className="btn btn-secondary col-sm" onClick={button.action}>{button.title}</button>
             </div>
           }
         </div>
@@ -27,3 +37,5 @@ export default class SectionHeader extends Component {
   }
 
 }
+
+export default withRouter(SectionHeader);
