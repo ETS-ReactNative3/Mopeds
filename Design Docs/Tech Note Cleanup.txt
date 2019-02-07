@@ -1,0 +1,14 @@
+Tech note cleanup
+
+Each day, the supervisor reviews the comments entered by the techs and edits the language
+to ensure the grammer is appropriate for customer consumption.  The supervisor will 
+open the text for each tech for the prior day (user specified date).  The resulting
+screen should list the job title and the notes entered by the tech(s).  All the notes
+need to be editable by the supervisor on the screen. 
+
+1. User navigates to the Options > Tech Notes menu option.
+2. User specifies one or more techs and the date on the top of the screen.
+    2.1 The date picker can be as simple as "yesterday" or a calander with stop & end dates
+3. The bottom of the screen shows the results in a pagination table
+    3.1 The table is read only except the notes column
+4. Add export button at bottom of screen, generate csv file
