@@ -17,7 +17,7 @@ const con = mysql.createConnection({
 	password: "55solutions",
 	database: "cavion"
 });
-
+// jwm
 const dirName = `${__dirname}/../`;
 
 con.connect(function (err) {

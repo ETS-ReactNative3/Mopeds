@@ -1,0 +1,20 @@
+Tech scan in or out
+
+The purpose of this story is for a technition to scan into a job/car, the result of this action 
+will be used to start the billing for that tech for that day for that car.  The scan out action
+is the closing of the time for the task and ends billing.  Notes are required to be entered by 
+the tech when scanning out so we know what work was performed on the car during that period. 
+
+1. From mobile device, the tech navigates to the site, logs in
+2. user navigates to scan menu option
+3. user points camera to QR code, the site will capture QR code and either freeze image or notify the user the 
+    QR code was scanned. UI then sends QR value to server API (techID, jobID). 
+4. server will determine if the action is scan in or scan out and send response to UI
+5. based on response, 
+    5.1 scan in 
+        5.1.1 present success confirmation with OK button to proceed
+    5.2 scan out 
+        5.2.1 UI presents user dialog box to enter comments for the tasks performed for the job
+        5.2.2 UI send server the comments
+        5.2.3 UI presents successful confirmation dialog
+        

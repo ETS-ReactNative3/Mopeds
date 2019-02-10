@@ -1,0 +1,7 @@
+Add customer
+
+A customer has one or more cars/jobs.  Customer details needed to be collected are: FName, LName, address
+phone number, email.  The layout of this screen should be very similar to the add job screen. 
+
+1. On the default/main/first screen, create an add customer button
+2. A simple form entry displays for the columns identified above

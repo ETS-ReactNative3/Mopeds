@@ -1,0 +1,11 @@
+Add job
+
+A job is a car, a customer may have one or more jobs.  Job details needed to be collected are: Make, 
+model, year, color, description.  The layout of this screen should be very similar to the add customer screen. 
+
+1. From main screen where customers are displayed, search or locate customer with a new job
+2. User clicks on customer row
+3. The resulting screen shows active jobs
+4. Create a add job button
+5. Display form to enter columns identified above
+6. UI posts data to server /api/todo 
