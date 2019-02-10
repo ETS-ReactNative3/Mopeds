@@ -3,9 +3,37 @@ import { withRouter } from "react-router-dom";
 import { API } from '../MomsBuickApp';
 import SectionHeader from '../components/SectionHeader';
 import CustomerForm from './CustomerForm';
+import MopedTable from '../components/MopedTable';
 
 export default class CustomerDetail extends Component {
   customerId = this.props.match.params.customerId;
+  jobsTableConfig = {
+    tableHeader: true,
+    text: {
+      noResults: "No Jobs Found"
+    },
+    // rowClick: (customer) => this.customerClick(customer),
+    columns: [
+      /*
+      {
+        key: 'idCustomers',
+        title: 'Customer ID'
+      },
+      */
+      {
+        key: 'idJobs',
+        title: 'Job ID'
+      },
+      {
+        key: 'idPerson',
+        title: 'Person ID'
+      },
+      {
+        key: 'description',
+        title: 'Description'
+      }
+    ]
+  };
 
   constructor(props) {
     super(props);
@@ -16,13 +44,13 @@ export default class CustomerDetail extends Component {
 
   componentDidMount() {
     this.getCustomer();
+    this.getCustomerJobs();
   }
 
   getCustomer() {
     this.setState({ isLoading: true });
     fetch(`${API}/customer?custId=${this.customerId}`)
       .then(response => {
-        console.log('fetched: ', response);
         if (response.ok) {
           return response.json();
         } else {
@@ -32,6 +60,22 @@ export default class CustomerDetail extends Component {
       .then(data => {
         const customerData = this.convertCustomerSql(data);
         this.setState({ data: customerData, isLoading: false });
+      })
+      .catch(error => this.setState({ error, isLoading: false }));
+  }
+
+  getCustomerJobs() {
+    this.setState({ isLoading: true });
+    fetch(`${API}/jobsByCustomer?custId=${this.customerId}`)
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Something went wrong ...');
+        }
+      })
+      .then(data => {
+        this.setState({ jobs: data, isLoading: false });
       })
       .catch(error => this.setState({ error, isLoading: false }));
   }
@@ -57,8 +101,7 @@ export default class CustomerDetail extends Component {
   }
 
   render() {
-    const { data, isLoading, showEdit } = this.state;
-    console.log('render ', data, isLoading);
+    const { data, isLoading, jobs, showEdit } = this.state;
     return (
       <div className={isLoading ? 'loading' : ''}>
         {data &&
@@ -71,6 +114,14 @@ export default class CustomerDetail extends Component {
         {data && !showEdit &&
           <div className="col-md-12 mx-auto">
             {data.custAddress} - {data.custCity} - {data.custState} - {data.custZip}
+            {jobs && 
+              <div className="row mt-5">
+                <div className="col-md-12">
+                  <SectionHeader title="Jobs" sectionLevel="2" />
+                  <MopedTable data={jobs} config={this.jobsTableConfig} />
+                  </div>
+              </div>
+            }
           </div>
         }
         {data && showEdit &&

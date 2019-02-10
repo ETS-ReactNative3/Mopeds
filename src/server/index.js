@@ -135,9 +135,9 @@ app.put('/tasks', function (req, res) {
 	}
 });
 
-app.post('/jobsByCustomer', function (req, res) {
-	const id = req.body.custId;
-	if (env === 'debug') console.log(req.body.custId);
+app.get('/api/jobsByCustomer', function (req, res) {
+	const id = req.query.custId;
+	if (env === 'debug') console.log(req.query.custId);
 	const sql = 'SELECT * FROM jobs WHERE idJobs = ' + mysql.escape(id);
 	con.query(sql, function (err, result) {
 		if (err) throw err;

@@ -12,19 +12,20 @@ class SectionHeader extends Component {
   }
 
   render() {
-    const { title, hasBack = false, button } = this.props;
+    const { title, hasBack = false, button, sectionLevel = '1' } = this.props;
+    const HeaderLevel = `h${sectionLevel}`;
     return (
       <div className="section-header mb-2">
         <div className="row">
           <div className="col-sm-8 col-md-9">
-            <h1>
+            <HeaderLevel>
               {hasBack &&
                 <a href="#" className="back mr-3" onClick={e => this.goBack(e)}>
                   <FontAwesomeIcon icon={faArrowAltCircleLeft} size="sm" />
                 </a>
               }
               {title}
-            </h1>
+            </HeaderLevel>
           </div>
           {button &&
             <div className="header-button col-sm-4 col-md-3">
