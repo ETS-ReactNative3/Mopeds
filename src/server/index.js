@@ -64,13 +64,44 @@ app.get('/api/jobs', function (req, res) {
 	});
 });
 
-app.put('/tasks', function (req, res) {
-	// accepts request to clock into or out of a job 
-	// action = scanIn scanOut
-	// args: action, jobId, techId
-	// put is: /tasks&action=scanIn?jobId=111?techId=222
+app.post('/api/tasksTest', function (req, res) {
+	if (req.body.action === "scanOut") {
+		const jobId = req.body.jobId;
+		const techId = req.body.techId;
+		if (env === 'debug') console.log(req.body.jobId);
+		const sql = 'SELECT * FROM TASKS WHERE idJobs = ' + mysql.escape(jobId) + ' and idPerson = ' + techId;
+		con.query(sql, function (err, result) {
+			if (err) throw err;
+			if (env === 'debug') console.log(result);
+			res.end(JSON.stringify(result));
+		});
+	}
+});
 
-	if (req.query.action === "scanIn") {
+app.post('/api/tasks', function (req, res) {
+	// accepts request to clock into or out of a job 
+	// args: jobId, techId
+	// post is: /tasks - { jobId: 111, techId: 222 }
+	const techId = req.body.techId;
+	const jobId = req.body.jobId;
+
+	// check for existing tasks without end date
+	const taskClause = 'idJobs = ' + mysql.escape(jobId) + ' and idPerson = ' + mysql.escape(techId) + ' and endDate is null';
+	const taskSql = 'SELECT idTasks FROM TASKS WHERE ' + taskClause;
+	con.query(taskSql, function (err, result) {
+		if (err) throw err;
+		if (result && result.length) {
+			// found a task, scan out
+			console.log('do scanOut: ', result[0].idTasks);
+			doScanOut(result[0].idTasks);
+		} else {
+			// no tasks found, scan in
+			console.log('do scanIn');
+			doScanIn();
+		}
+	});
+
+	function doScanIn() {
 		console.log("inside scanin");
 		// insert new job task row to start scan in
 		// get mysql date format for current time
@@ -80,16 +111,18 @@ app.put('/tasks', function (req, res) {
 			" idPerson, " +
 			" startDate) " +
 			" values " +
-			" ( " + mysql.escape(req.query.jobId) + "," +
-			mysql.escape(req.query.techId) + ",'" +
+			" ( " + mysql.escape(jobId) + "," +
+			mysql.escape(techId) + ",'" +
 			now + "')";
 		con.query(sql, function (err, result) {
 			if (err) throw err;
 			if (env === 'debug') console.log(result);
-			res.end(JSON.stringify(result));
+			res.end(JSON.stringify({ action: 'scanIn', jobId, techId, startDate: now, taskId: result.insertId }));
 		});
-	};
-	if (req.query.action === "scanOut") {
+	}
+
+	function doScanOut(idForUpdate) {
+		if (env == "debug") console.log("idForUpdate: " + idForUpdate);
 		// todo this works if there is a row with a null endDate, 
 		// if there are no rows with a null endDate, it pukes, needs error
 		// handling for that scenario. 
@@ -98,41 +131,18 @@ app.put('/tasks', function (req, res) {
 		// put is: /tasks&action=scanOut?jobId=111?techId=222?comments=someworkhappened
 		// get mysql date format for current time. 
 		const now = dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss");
+		const clause = 'idTasks = ' + idForUpdate;
+		const sql = 'UPDATE tasks SET endDate ="' + now + '" WHERE ' + clause;
 
-		// get the row id for the tech with a null endDate column
-		const userId = mysql.escape(req.query.techId);
-		const jobId = mysql.escape(req.query.jobId);
-		const clause = 'idJobs = ' + jobId + ' and idPerson = ' + userId + ' and endDate is null';
-		const sql = 'SELECT idTasks FROM TASKS WHERE ' + clause;
-
-		// update the row with the current date time
-		const idForUpdate = 'empty';
-
-		// call function to get idTask for the update below
-		// used a function here to pass the async first call result to 
-		// next update statement, otherwise the result was not seen by
-		// the second update sql. 
-		getInfo(sql, function (result) {
-			idForUpdate = result;
-			if (env == "debug") console.log("idForUpdate: " + idForUpdate);
-			const clause = 'idTasks = ' + idForUpdate;
-			const sql = 'UPDATE tasks SET endDate ="' + now + '" WHERE ' + clause;
-
-			con.query(sql, function (err, result) {
-				if (err) throw err;
-				if (env === 'debug') console.log(sql, result);
-				res.end(JSON.stringify(result));
-			});
-		});
-	};
-	// handle the async call to retrieve the idtask for the null endDate row
-	// returns the idTask of the first row where endDate is null
-	function getInfo(sql, callback) {
-		con.query(sql, function (err, result, fields) {
+		// TODO - add a lookup of the job/car to return here? result screen could verify:
+		//			-  "You've scanned out of Fred's '68 Mustang at 5:12 PM - Started at: {} - Total time worked: {}"
+		con.query(sql, function (err, result) {
 			if (err) throw err;
-			return callback(result[0].idTasks);
+			if (env === 'debug') console.log(sql, result);
+			res.end(JSON.stringify({ action: 'scanOut', endDate: now, taskId: idForUpdate, jobId, techId }));
 		});
 	}
+
 });
 
 app.get('/api/jobsByCustomer', function (req, res) {

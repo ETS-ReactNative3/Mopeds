@@ -6,7 +6,7 @@ import Customers from './customers/Customers';
 import CustomerForm from './customers/CustomerForm';
 import CustomerDetail from './customers/CustomerDetail';
 import Jobs from './Jobs';
-import Scan from './Scan';
+import Scan from './scan/Scan';
 
 export const API = '/api';
 
