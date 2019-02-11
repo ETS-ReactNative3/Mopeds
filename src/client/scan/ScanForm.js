@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { API } from '../MomsBuickApp';
+import { API } from '../App';
 import SectionHeader from '../components/SectionHeader';
 import TextInput from '../components/form/TextInput';
 import TextArea from '../components/form/TextArea';

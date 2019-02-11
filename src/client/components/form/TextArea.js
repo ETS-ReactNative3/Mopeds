@@ -1,16 +1,13 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-export default class TextArea extends Component {
+const TextArea = props => {
+  const { label, name, className = '', placeholder = false, value = '', readOnly = false } = props;
+  return (
+    <div className={`form-group ${className}`}>
+      <label htmlFor={`tainput${name}`}>{label}</label>
+      <textarea className="form-control" id={`tainput${name}`} placeholder={placeholder ? placeholder : label} name={name} defaultValue={value} readOnly={readOnly} />
+    </div>
+  );
+};
 
-  render() {
-    const { label, name, className = '', placeholder = false, value = '', readOnly = false } = this.props;
-    return (
-      <div className={`form-group ${className}`}>
-        <label htmlFor={`tainput${name}`}>{label}</label>
-        <textarea className="form-control" id={`tainput${name}`} placeholder={placeholder ? placeholder : label} name={name} defaultValue={value} readOnly={readOnly} />
-      </div>
-    );
-  }
-
-}
-
+export default TextArea;

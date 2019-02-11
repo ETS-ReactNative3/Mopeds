@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
-import { API } from '../MomsBuickApp';
+import { API } from '../App';
 import SectionHeader from '../components/SectionHeader';
 import QrScanner from '../components/qr-scanner/qr-scanner.min';
 import ScanForm from './ScanForm';
@@ -79,18 +79,15 @@ export default class Scan extends Component {
     // render Scan - define video element & attach reference object
     return (
       <div>
-        <SectionHeader title="Scan" />
+        <SectionHeader title="Scan" button={{ action: () => this.sendCodeScan('techId=1&jobId=1'), title: "Send Test" }} />
         {!scanStatus &&
           <video muted autoPlay playsInline ref={this.videoElem}></video>
         }
         {scanStatus && scanResult &&
           <ScanForm scanStatus={scanStatus} scanResult={scanResult} doneFunc={() => this.processScan({})} />
         }
-        <button onClick={() => this.sendCodeScan('techId=1&jobId=1')}>Send Test</button>
       </div>
     );
   }
 
 }
-
-// 

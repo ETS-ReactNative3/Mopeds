@@ -10,7 +10,7 @@ import Scan from './scan/Scan';
 
 export const API = '/api';
 
-export default class MomsBuickApp extends Component {
+export default class App extends Component {
 
   render() {
     return (

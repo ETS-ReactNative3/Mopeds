@@ -1,5 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import MomsBuickApp from './MomsBuickApp';
+import App from './App';
 
-ReactDOM.render(<MomsBuickApp />, document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById('root'));

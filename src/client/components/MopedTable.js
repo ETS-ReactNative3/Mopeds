@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from "react-router-dom";
 
 export default class MopedTable extends Component {
 
@@ -20,7 +19,7 @@ export default class MopedTable extends Component {
     const { data, config } = this.props;
     return (
       <table className="table">
-        {config.tableHeader && data && data.length > 0 && 
+        {config.tableHeader && data && data.length > 0 &&
           <this.MopedTableHeader />
         }
         <tbody>
@@ -33,7 +32,7 @@ export default class MopedTable extends Component {
               </tr>
             )
           })}
-          {(!data || !data.length) && 
+          {(!data || !data.length) &&
             <tr><td colSpan={config.columns.length}>{config.text.noResults ? config.text.noResults : 'No Data'}</td></tr>
           }
         </tbody>

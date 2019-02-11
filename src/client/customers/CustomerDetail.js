@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from "react-router-dom";
-import { API } from '../MomsBuickApp';
+import { API } from '../App';
 import SectionHeader from '../components/SectionHeader';
 import CustomerForm from './CustomerForm';
 import MopedTable from '../components/MopedTable';
@@ -114,12 +114,12 @@ export default class CustomerDetail extends Component {
         {data && !showEdit &&
           <div className="col-md-12 mx-auto">
             {data.custAddress} - {data.custCity} - {data.custState} - {data.custZip}
-            {jobs && 
+            {jobs &&
               <div className="row mt-5">
                 <div className="col-md-12">
                   <SectionHeader title="Jobs" sectionLevel="2" />
                   <MopedTable data={jobs} config={this.jobsTableConfig} />
-                  </div>
+                </div>
               </div>
             }
           </div>
