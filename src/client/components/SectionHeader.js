@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowAltCircleLeft } from '@fortawesome/free-solid-svg-icons';
 
 class SectionHeader extends Component {
 
@@ -19,9 +17,9 @@ class SectionHeader extends Component {
           <div className="col-sm-8 col-md-9">
             <HeaderLevel>
               {hasBack &&
-                <a href="#" className="back mr-3" onClick={e => this.goBack(e)}>
-                  <FontAwesomeIcon icon={faArrowAltCircleLeft} size="sm" />
-                </a>
+                <button className="btn back mr-3" onClick={e => this.goBack(e)}>
+                  <span className="icon"></span>
+                </button>
               }
               {title}
             </HeaderLevel>
