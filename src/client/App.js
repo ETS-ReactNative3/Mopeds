@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { HashRouter, Route, Link } from "react-router-dom";
 import 'bootstrap';
+import $ from 'jquery';
 import './main.scss';
 import Customers from './customers/Customers';
 import CustomerForm from './customers/CustomerForm';
@@ -11,6 +12,13 @@ import Scan from './scan/Scan';
 export const API = '/api';
 
 export default class App extends Component {
+
+  componentDidMount() {
+    // hide collapsible menu on link click
+    $('.navbar a').on('click', function () {
+      $('.navbar-collapse').collapse('hide');
+    });
+  }
 
   render() {
     return (
