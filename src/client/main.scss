@@ -28,7 +28,7 @@ header {
     }
   }
   button.back:hover {
-    background-color: #efefef;
+    background-color: rgba(0, 80, 125, 0.05) !important;
   }
 
   .header-button {
@@ -49,13 +49,31 @@ header {
 }
 
 /* Table */
-.row-click:hover {
-  cursor: pointer;
-  background-color: rgba(0, 0, 0, .05);
-}
-.row-click:active {
-  cursor: pointer;
-  background-color: rgba(50, 250, 50, .1);
+.table {
+  &.table-striped tbody tr:nth-of-type(2n+1) {
+    background-color: rgba(0, 0, 0, 0.02);
+  }
+  .row-click:hover {
+    cursor: pointer;
+    background-color: rgba(0, 80, 125, 0.05) !important;
+  }
+  .row-click:active {
+    cursor: pointer;
+    background-color: rgba(0, 80, 175, 0.05) !important;
+  }
+  .searchRow {
+    > td > div {
+      position: relative;
+    }
+    button.close {
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 1.3em;
+      width: 1.4em;
+    }
+  
+  }
 }
 
 /* Forms */

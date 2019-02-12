@@ -9,6 +9,9 @@ export default class Customers extends Component {
   customerTableConfig = {
     tableHeader: true,
     rowClick: (customer) => this.customerClick(customer),
+    text: {
+      noResults: "No Customers Found"
+    },
     columns: [
       {
         key: 'idCustomers',
@@ -43,10 +46,7 @@ export default class Customers extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      data: [{ wow: 'test' }],
-      showForm: false
-    };
+    this.state = {};
   }
 
   componentDidMount() {
@@ -76,12 +76,12 @@ export default class Customers extends Component {
   }
 
   render() {
-    const { data, isLoading, showForm } = this.state;
+    const { data, isLoading } = this.state;
     return (
       <div className={isLoading ? 'loading' : ''}>
         <SectionHeader title="Customers" button={{ action: () => this.addCustomerForm(), title: "Add Customer" }} />
         {data &&
-          <MopedTable data={data} config={this.customerTableConfig} />
+          <MopedTable data={data} config={this.customerTableConfig} searchable />
         }
       </div>
     );
