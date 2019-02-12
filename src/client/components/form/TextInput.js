@@ -2,20 +2,13 @@ import React from 'react';
 
 const TextInput = props => {
   const { label = false, name, className = '', placeholder, value = '', onChange = undefined, plainText = false, readOnly = false } = props;
+  const inputClass = plainText ? 'form-control-plaintext font-weight-bold' : 'form-control';
   return (
-    <div className={`form-group ${className}`}>
+    <div className={`form-group${className !== '' ? ` ${className}` : ''}`}>
       {label &&
         <label htmlFor={`tinput${name}`}>{label}</label>
       }
-      {plainText &&
-        <p className="form-control-plaintext font-weight-bold">
-          {value}
-          <input type="hidden" name={name} id={`tinput${name}`} value={value} />
-        </p>
-      }
-      {!plainText &&
-        <input type="text" className="form-control" id={`tinput${name}`} placeholder={placeholder ? placeholder : undefined} name={name} value={value} readOnly={readOnly} onChange={onChange} />
-      }
+      <input type="text" className={inputClass} id={`tinput${name}`} placeholder={placeholder ? placeholder : undefined} name={name} value={value} readOnly={readOnly} onChange={onChange} />
     </div>
   );
 };
