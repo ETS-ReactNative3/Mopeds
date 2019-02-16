@@ -40,9 +40,11 @@ app.get('/index.htm', function (req, res) {
 })
 */
 
+/*
 app.get('/addCustomer.htm', function (req, res) {
   res.sendFile(__dirname + "/" + "addCustomer.htm");
 })
+*/
 
 app.get('/addJob.htm', function (req, res) {
   res.sendFile(__dirname + "/" + "addJob.htm");
@@ -204,50 +206,33 @@ app.post('/api/addCustomer', (req, res) => {
   });
 });
 
-app.post('/api/customer', function (req, res) {
-	// accept update to customer last name if action =edit, 
-	// else show the cust details
-	// post is: /customers&action=edit
-	const custId = req.body.customerId;
-	const custLN = req.body.custLastName;
-	const custFN = req.body.custFirstName;
-	const custAddr = req.body.custAddress;
-	const custCity = req.body.custCity;
-	const custState = req.body.custState;
-	const custZip = req.body.custZip;
-
-	if (req.body.action === "edit") {
-
-		const sql = "UPDATE CUSTOMERS SET " +
-			" nameFirst = " + mysql.escape(custFN) +
-			", nameLast = " + mysql.escape(custLN) +
-			", address = " + mysql.escape(custAddr) +
-			", city = " + mysql.escape(custCity) +
-			", state = " + mysql.escape(custState) +
-			", zip = " + mysql.escape(custZip) +
-			" WHERE IDCUSTOMERS = " +
-			mysql.escape(custId);
-		if (env === 'debug') console.log(sql);
-		con.query(sql, function (err, result) {
-			if (err) throw err;
-			if (env === 'debug') console.log(result);
-			res.end(JSON.stringify(result));
-		});
-	}
-	// TODO this else needs to change to a case or handle the 
-	// action=view paramater 
-	// as is, a null parm list will display the cust detail
-	else {
-		const id = req.query.custId;
-		if (env === 'debug') console.log(req.body.custId);
-		const sql = 'SELECT * FROM customers WHERE idCustomers = ' + mysql.escape(id);
-		con.query(sql, function (err, result) {
-			if (err) throw err;
-			if (env === 'debug') console.log(result);
-			res.end(JSON.stringify(result));
-		});
-	}
-
+app.post('/api/editCustomer', (req, res) => {
+  // accept update to customer 
+  console.log('in edit customer');
+  const custId = req.query.customerId;
+  const custLN = req.query.custLastName;
+  const custFN = req.query.custFirstName;
+  const custAddr = req.query.custAddress;
+  const custCity = req.query.custCity;
+  const custState = req.query.custState;
+  const custZip = req.query.custZip;
+  console.log(custLN);
+  
+  const sql = `${'UPDATE CUSTOMERS SET '
+    + ' nameFirst = '}${mysql.escape(custFN)
+  }, nameLast = ${mysql.escape(custLN)
+  }, address = ${mysql.escape(custAddr)
+  }, city = ${mysql.escape(custCity)
+  }, state = ${mysql.escape(custState)
+  }, zip = ${mysql.escape(custZip)
+  } WHERE IDCUSTOMERS = ${
+    mysql.escape(custId)}`;
+  console.log(sql);
+  con.query(sql, (err, result) => {
+    if (err) throw err;
+    if (env === 'debug') console.log(result);
+    res.end(JSON.stringify(result));
+  });
 });
 
 app.get('/api/customer', function (req, res) {
