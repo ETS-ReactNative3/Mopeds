@@ -172,37 +172,36 @@ app.put('/api/jobsByCustomer', (req, res) => {
   });
 });
 
-app.post('/api/addCustomer', function (req, res) {
-	// console.log('addCustomer ', req);
-	console.log('addCustomer ', req.body);
-	const custLN = req.query.custLastName;
-	const custFN = req.query.custFirstName;
-	const custA = req.query.custAddress;
-	const custC = req.query.custCity;
-	const custS = req.query.custState;
-	const custZ = req.query.custZip;
-	console.log('addCustomer - name: ', custFN, custLN);
-
-	const sql = "INSERT INTO CUSTOMERS " +
-		" (idC, nameLast, " +
-		" nameFirst, " +
-		" address, " +
-		" city, " +
-		" state, " +
-		" zip) " +
-		" values " +
-		" ( 1, " + mysql.escape(custLN) + "," +
-		mysql.escape(custFN) + "," +
-		mysql.escape(custA) + "," +
-		mysql.escape(custC) + "," +
-		mysql.escape(custS) + "," +
-		mysql.escape(custZ) + ")";
-	console.log(sql);
-	con.query(sql, function (err, result) {
-		if (err) throw err;
-		if (env === 'debug') console.log(result);
-		res.end(JSON.stringify(result));
-	});
+app.post('/api/addCustomer', (req, res) => {
+  // console.log('addCustomer ', req);
+  console.log('addCustomer ', req.body);
+  const custLN = req.query.custLastName;
+  const custFN = req.query.custFirstName;
+  const custA = req.query.custAddress;
+  const custC = req.query.custCity;
+  const custS = req.query.custState;
+  const custZ = req.query.custZip;
+  console.log('addCustomer - name: ', custFN, custLN);
+  const sql = `${'INSERT INTO CUSTOMERS '
+    + ' (idC, nameLast, '
+    + ' nameFirst, '
+    + ' address, '
+    + ' city, '
+    + ' state, '
+    + ' zip) '
+    + ' values '
+    + ' ( 1, '}${mysql.escape(custLN)},${
+    mysql.escape(custFN)},${
+    mysql.escape(custA)},${
+    mysql.escape(custC)},${
+    mysql.escape(custS)},${
+    mysql.escape(custZ)})`;
+  console.log(sql);
+  con.query(sql, (err, result) => {
+    if (err) throw err;
+    if (env === 'debug') console.log(result);
+    res.end(JSON.stringify(result));
+  });
 });
 
 app.post('/api/customer', function (req, res) {
