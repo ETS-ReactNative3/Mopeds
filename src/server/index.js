@@ -157,14 +157,7 @@ app.put('/tasks', function (req, res) {
 	}
 });
 
-
-/*
-app.put('/api/jobsByCustomer', (req, res) => {
-  console.log('in jobs by customer get');
-});
-*/
-
-
+// /api/jobsByCustomer?custId=1
 app.put('/api/jobsByCustomer', (req, res) => {
   console.log('in jobsByCustomer put');
   const id = req.query.custId;
@@ -179,33 +172,32 @@ app.put('/api/jobsByCustomer', (req, res) => {
   });
 });
 
-
-
 app.post('/api/addCustomer', function (req, res) {
 	// console.log('addCustomer ', req);
 	console.log('addCustomer ', req.body);
-	const custLN = req.body.custLastName;
-	const custFN = req.body.custFirstName;
-	const custA = req.body.custAddress;
-	const custC = req.body.custCity;
-	const custS = req.body.custState;
-	const custZ = req.body.custZip;
+	const custLN = req.query.custLastName;
+	const custFN = req.query.custFirstName;
+	const custA = req.query.custAddress;
+	const custC = req.query.custCity;
+	const custS = req.query.custState;
+	const custZ = req.query.custZip;
 	console.log('addCustomer - name: ', custFN, custLN);
 
 	const sql = "INSERT INTO CUSTOMERS " +
-		" (nameLast, " +
+		" (idC, nameLast, " +
 		" nameFirst, " +
 		" address, " +
 		" city, " +
 		" state, " +
 		" zip) " +
 		" values " +
-		" ( " + mysql.escape(custLN) + "," +
+		" ( 1, " + mysql.escape(custLN) + "," +
 		mysql.escape(custFN) + "," +
 		mysql.escape(custA) + "," +
 		mysql.escape(custC) + "," +
 		mysql.escape(custS) + "," +
 		mysql.escape(custZ) + ")";
+	console.log(sql);
 	con.query(sql, function (err, result) {
 		if (err) throw err;
 		if (env === 'debug') console.log(result);
