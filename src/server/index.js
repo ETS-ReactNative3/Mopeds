@@ -23,7 +23,7 @@ const con = mysql.createConnection({
   password: "55solutions",
   database: "cavion"
 });
-// jwm
+
 const dirName = `${__dirname}/../`;
 
 con.connect((err) => {
@@ -33,32 +33,12 @@ con.connect((err) => {
 
 app.get('/api/getUsername', (req, res) => res.send({ username: os.userInfo().username }));
 
-/*
-app.get('/index.htm', function (req, res) {
-  console.log('trying route 2: ', __dirname, " + /index.htm");
-  res.sendFile(__dirname + "/" + "index.htm");
-})
-*/
-
-/*
-app.get('/addCustomer.htm', function (req, res) {
-  res.sendFile(__dirname + "/" + "addCustomer.htm");
-})
-*/
-
-app.get('/addJob.htm', function (req, res) {
-  res.sendFile(__dirname + "/" + "addJob.htm");
-})
-
-app.get('/addTask.htm', function (req, res) {
-  res.sendFile(__dirname + "/" + "addTask.htm");
-})
+const idC = `'1'`;
 
 app.get('/api/customers', function (req, res) {
   const sql = 'SELECT * FROM customers';
   con.query(sql, function (err, result) {
     if (err) throw err;
-    if (env === 'debug') console.log(result);
     res.end(JSON.stringify(result));
   });
 });
@@ -67,123 +47,81 @@ app.get('/api/jobs', function (req, res) {
   const sql = 'SELECT * FROM jobs';
   con.query(sql, function (err, result) {
     if (err) throw err;
-    if (env === 'debug') console.log(result);
     res.end(JSON.stringify(result));
   });
 });
 
 app.put('/api/scan', (req, res) => {
-  let jobId = req.query.jobId;
-  let techId = req.query.techId;
-  let comment = req.query.comment;
-  
-  const sql = 'INSERT INTO TASKS' +
-  " (idC, idTasks, idJobs, idPerson, startDate"
+  // determine if techId and jobId are already scanned in
+  const jobId = mysql.escape(req.query.jobId);
+  const techId = mysql.escape(req.query.techId);
+  const now = dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss");
 
-  con.query(sql, function (err, result) {
-	if (err) throw err;
-	if (env === 'debug') console.log(result);
-	res.end(JSON.stringify(result));
-    res.end(response)
-    });
+  const selectSql = `${'SELECT * FROM TASKS WHERE idC = 1 and IDJOBS = '}
+    ${jobId} and IDPERSON = ${techId} and ENDDATE is NULL`;
+
+  // determine if the tech is already scanned into THIS job
+  // get the row id for the tech with a null endDate column
+
+  getRowId(selectSql, (result) => {
+    const idForUpdate = result;
+    if (typeof idForUpdate === 'string') { // need to follow the scan In flow
+      const insertSql = 'INSERT INTO TASKS '
+        + ' (idC, idJobs, idPerson, startDate) '
+        + ' values ( ' + idC + ', ' + mysql.escape(req.query.jobId)
+        + ', ' + mysql.escape(req.query.techId)
+        + ", '" + now + "')";
+      con.query(insertSql, function (err, result) {
+        if (err) throw err;
+        res.end('Success');
+      });
+    } else {
+      res.end('Need to call Scan Out');
+    }
+  });
 });
 
-app.put('/tasks', function (req, res) {
-	// accepts request to clock into or out of a job 
-	// action = scanIn scanOut
-	// args: action, jobId, techId
-	// put is: /tasks&action=scanIn?jobId=111?techId=222
+app.put('/api/scanOut', (req, res) => {
+  const jobId = mysql.escape(req.query.jobId);
+  const techId = mysql.escape(req.query.techId);
+  const comment = mysql.escape(req.query.comment);
+  let idForUpdate = 'empty';
+  const now = dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss");
+  const selectSql = `${'SELECT * FROM TASKS WHERE idC = 1 and IDJOBS = '}
+    ${jobId} and IDPERSON = ${techId} and ENDDATE is NULL`;
 
-	if (req.query.action === "scanIn") {
-		console.log("inside scanin");
-		// insert new job task row to start scan in
-		// get mysql date format for current time
-		const now = dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss");
-		const sql = "INSERT INTO TASKS " +
-			" (idJobs, " +
-			" idPerson, " +
-			" startDate) " +
-			" values " +
-			" ( " + mysql.escape(req.query.jobId) + "," +
-			mysql.escape(req.query.techId) + ",'" +
-			now + "')";
-		con.query(sql, function (err, result) {
-			if (err) throw err;
-			if (env === 'debug') console.log(result);
-			res.end(JSON.stringify(result));
-		});
-	};
-	if (req.query.action === "scanOut") {
-		// todo this works if there is a row with a null endDate, 
-		// if there are no rows with a null endDate, it pukes, needs error
-		// handling for that scenario. 
-		//
-		// update job task row to scan out
-		// put is: /tasks&action=scanOut?jobId=111?techId=222?comments=someworkhappened
-		// get mysql date format for current time. 
-		const now = dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss");
-
-		// get the row id for the tech with a null endDate column
-		const userId = mysql.escape(req.query.techId);
-		const jobId = mysql.escape(req.query.jobId);
-		const clause = 'idJobs = ' + jobId + ' and idPerson = ' + userId + ' and endDate is null';
-		const sql = 'SELECT idTasks FROM TASKS WHERE ' + clause;
-
-		// update the row with the current date time
-		const idForUpdate = 'empty';
-
-		// call function to get idTask for the update below
-		// used a function here to pass the async first call result to 
-		// next update statement, otherwise the result was not seen by
-		// the second update sql. 
-		getInfo(sql, function (result) {
-			idForUpdate = result;
-			if (env === "debug") console.log("idForUpdate: " + idForUpdate);
-			const clause = 'idTasks = ' + idForUpdate;
-			const sql = 'UPDATE tasks SET endDate ="' + now + '" WHERE ' + clause;
-
-			con.query(sql, function (err, result) {
-				if (err) throw err;
-				if (env === 'debug') console.log(sql, result);
-				res.end(JSON.stringify(result));
-			});
-		});
-	};
-	// handle the async call to retrieve the idtask for the null endDate row
-	// returns the idTask of the first row where endDate is null
-	function getInfo(sql, callback) {
-		con.query(sql, function (err, result, fields) {
-			if (err) throw err;
-			return callback(result[0].idTasks);
-		});
-	}
+  getRowId(selectSql, (result) => {
+    // At this point, the tech has already scanned in and
+    // we need to update the enddate time stamp and comment
+    idForUpdate = result;
+    const clause = `idTasks = ${idForUpdate}`;
+    const updateSql = `UPDATE tasks SET endDate =' ${now} ', 
+      comments = ${comment} WHERE ${clause}`;
+    con.query(updateSql, (err, result2) => {
+      if (err) throw err;
+      res.end('Success');
+    });
+  });
 });
 
 // /api/jobsByCustomer?custId=1
-app.put('/api/jobsByCustomer', (req, res) => {
-  console.log('in jobsByCustomer put');
+app.get('/api/jobsByCustomer', (req, res) => {
   const id = req.query.custId;
-  if (env === 'debug') console.log(req.query.custId);
-  const sql = `SELECT * FROM jobs WHERE idJobs = ${mysql.escape(id)}`;
-  console.log(sql);
+  const sql = `SELECT * FROM jobs WHERE idCustomers = ${mysql.escape(id)}`;
   // eslint-disable-next-line func-names
   con.query(sql, (err, result) => {
     if (err) throw err;
-    if (env === 'debug') console.log(result);
     res.end(JSON.stringify(result));
   });
 });
 
 app.post('/api/addCustomer', (req, res) => {
-  // console.log('addCustomer ', req);
-  console.log('addCustomer ', req.body);
   const custLN = req.query.custLastName;
   const custFN = req.query.custFirstName;
   const custA = req.query.custAddress;
   const custC = req.query.custCity;
   const custS = req.query.custState;
   const custZ = req.query.custZip;
-  console.log('addCustomer - name: ', custFN, custLN);
   const sql = `${'INSERT INTO CUSTOMERS '
     + ' (idC, nameLast, '
     + ' nameFirst, '
@@ -198,17 +136,14 @@ app.post('/api/addCustomer', (req, res) => {
     mysql.escape(custC)},${
     mysql.escape(custS)},${
     mysql.escape(custZ)})`;
-  console.log(sql);
   con.query(sql, (err, result) => {
     if (err) throw err;
-    if (env === 'debug') console.log(result);
     res.end(JSON.stringify(result));
   });
 });
 
 app.post('/api/editCustomer', (req, res) => {
-  // accept update to customer 
-  console.log('in edit customer');
+  // accept update to customer
   const custId = req.query.customerId;
   const custLN = req.query.custLastName;
   const custFN = req.query.custFirstName;
@@ -216,8 +151,6 @@ app.post('/api/editCustomer', (req, res) => {
   const custCity = req.query.custCity;
   const custState = req.query.custState;
   const custZip = req.query.custZip;
-  console.log(custLN);
-  
   const sql = `${'UPDATE CUSTOMERS SET '
     + ' nameFirst = '}${mysql.escape(custFN)
   }, nameLast = ${mysql.escape(custLN)
@@ -227,21 +160,17 @@ app.post('/api/editCustomer', (req, res) => {
   }, zip = ${mysql.escape(custZip)
   } WHERE IDCUSTOMERS = ${
     mysql.escape(custId)}`;
-  console.log(sql);
   con.query(sql, (err, result) => {
     if (err) throw err;
-    if (env === 'debug') console.log(result);
     res.end(JSON.stringify(result));
   });
 });
 
 app.get('/api/customer', function (req, res) {
 	const id = req.query.custId;
-	if (env === 'debug') console.log(req.body.custId);
 	const sql = 'SELECT * FROM customers WHERE idCustomers = ' + mysql.escape(id);
 	con.query(sql, function (err, result) {
 		if (err) throw err;
-		if (env === 'debug') console.log(result);
 		res.end(JSON.stringify(result));
 	});
 });
@@ -273,10 +202,8 @@ app.post('/addPartToJob', function (req, res) {
 			mysql.escape(price) + "," +
 			mysql.escape(quantity) + ",'" +
 			status + "'," + "'" + dateCreated + "')";
-		console.log(sql);
 		con.query(sql, function (err, result) {
 			if (err) throw err;
-			if (env === 'debug') console.log(result);
 			res.end(JSON.stringify(result));
 		});
 	}
@@ -289,8 +216,6 @@ app.post('/addJob', function (req, res) {
 	const jDesc = req.body.jobDesc;
 	const pId = req.body.personId;
 
-	if (env === 'debug') console.log(req.body.custLN);
-
 	const sql = "INSERT INTO JOBS " +
 		" (idCustomers, " +
 		" description, " +
@@ -302,7 +227,6 @@ app.post('/addJob', function (req, res) {
 
 	con.query(sql, function (err, result) {
 		if (err) throw err;
-		if (env === 'debug') console.log(result);
 		res.end(JSON.stringify(result));
 	});
 
@@ -313,8 +237,6 @@ app.post('/addTask', function (req, res) {
 	const pId = req.body.personId;
 	const sDate = req.body.startDate;
 	const eDate = req.body.endDate;
-
-	if (env === 'debug') console.log(req.body.custLN);
 
 	const sql = "INSERT INTO TASKS " +
 		" (idJobs, " +
@@ -327,15 +249,19 @@ app.post('/addTask', function (req, res) {
 		mysql.escape(sDate) + "," +
 		mysql.escape(eDate) + ")";
 
-	if (env === 'debug') console.log(sql);
 	con.query(sql, function (err, result) {
 		if (err) throw err;
-		if (env === 'debug') console.log(result);
 		res.end(JSON.stringify(result));
 	});
 
 });
 
+function getRowId(sql, callback) {
+  con.query(sql, (err, result) => {
+    if (err) throw err;
+    return (result.length > 0) ? callback(result[0].idTasks) : callback('null');
+  });
+}
 /*app.post('/process_post', urlencodedParser, function (req, res) {
 	response = {
 		first_name: req.body.first_name,
