@@ -11,6 +11,8 @@ export default class Jobs extends Component {
     text: {
       noResults: "No Jobs Found"
     },
+    pager: true,
+    searchable: true,
     // rowClick: (customer) => this.customerClick(customer),
     columns: [
       {
@@ -35,7 +37,6 @@ export default class Jobs extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: [{ wow: 'test' }],
       showForm: false
     };
   }
@@ -48,7 +49,6 @@ export default class Jobs extends Component {
     this.setState({ isLoading: true });
     fetch(`${API}/jobs`)
       .then(response => {
-        console.log('fetched: ', response);
         if (response.ok) {
           return response.json();
         } else {
@@ -62,7 +62,6 @@ export default class Jobs extends Component {
 
   render() {
     const { data, isLoading, name, showForm } = this.state;
-    console.log('render ', data, isLoading);
     return (
       <div className={isLoading ? 'loading' : ''}>
         <SectionHeader title="Jobs" />

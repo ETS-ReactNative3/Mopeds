@@ -12,6 +12,8 @@ export default class Customers extends Component {
     text: {
       noResults: "No Customers Found"
     },
+    pager: true,
+    searchable: true,
     columns: [
       {
         key: 'idCustomers',
@@ -81,7 +83,7 @@ export default class Customers extends Component {
       <div className={isLoading ? 'loading' : ''}>
         <SectionHeader title="Customers" button={{ action: () => this.addCustomerForm(), title: "Add Customer" }} />
         {data &&
-          <MopedTable data={data} config={this.customerTableConfig} searchable />
+          <MopedTable data={data} config={this.customerTableConfig} />
         }
       </div>
     );

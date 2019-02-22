@@ -38,7 +38,7 @@ export default class CustomerForm extends Component {
       .map(field => body[field] = this.state[field]);
 
     if (this.props.customer) {
-      action = 'customer';
+      action = 'editCustomer';
       body.action = 'edit';
     }
     this.setState({ isLoading: true });
