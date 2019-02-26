@@ -4,8 +4,6 @@ import SectionHeader from '../components/SectionHeader';
 import TextInput from '../components/form/TextInput';
 import TextArea from '../components/form/TextArea';
 
-const action = 'addJobComments';
-
 export default class ScanForm extends Component {
 
   constructor(props) {
@@ -24,14 +22,14 @@ export default class ScanForm extends Component {
         'jobId',
         'techId',
         'taskId',
-        'comments'
+        'comment'
       ];
       addJobDescriptionFields
         .map(field => body[field] = this.state[field]);
 
       this.setState({ isLoading: true });
-      fetch(`${API}/${action}`, {
-        method: 'POST',
+      fetch(`${API}/scanOut`, {
+        method: 'PUT',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
@@ -67,32 +65,21 @@ export default class ScanForm extends Component {
 
   render() {
     const { scanStatus, scanResult } = this.props;
-    const { comments } = this.state;
-    const title = scanStatus === 'scanIn' ? 'Scanned In' : 'Scanned Out';
+    const { comment } = this.state;
     return (
       <div>
-        <SectionHeader sectionLevel="2" title={title} />
         <div className="row">
           <form className="col-md-11 mx-auto" onSubmit={event => this.handleSubmit(event)} onChange={event => this.handleChange(event)}>
             <div className="form-row">
               <TextInput label="Tech ID" name="techId" className="col-md-6" value={scanResult.techId} plainText />
               <TextInput label="Job ID" name="jobId" className="col-md-6" value={scanResult.jobId} plainText />
             </div>
-            <div className="form-row">
-              <TextInput label="Task ID" name="taskId" className="col-md-6" value={scanResult.taskId} plainText />
-              {scanStatus === 'scanIn' &&
-                <TextInput label="Start Date" name="startDate" className="col-md-6" value={scanResult.startDate} plainText />
-              }
-              {scanStatus === 'scanOut' &&
-                <TextInput label="End Date" name="endDate" className="col-md-6" value={scanResult.endDate} plainText />
-              }
-            </div>
             {scanStatus === 'scanOut' &&
               <div className="form-row">
-                <TextArea label="Comments" name="comments" value={comments} className="col-md-12" />
+                <TextArea label="Comments" name="comment" value={comment} className="col-md-12" />
               </div>
             }
-            <button type="submit" className="btn btn-primary">{scanStatus === 'scanOut' ? 'Save' : 'Ok'}</button>
+            <button type="submit" className="btn btn-primary col-sm col-md-2">{scanStatus === 'scanOut' ? 'Save' : 'Ok'}</button>
           </form>
         </div>
       </div>

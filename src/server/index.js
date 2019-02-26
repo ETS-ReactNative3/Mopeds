@@ -53,8 +53,8 @@ app.get('/api/jobs', function (req, res) {
 
 app.put('/api/scan', (req, res) => {
   // determine if techId and jobId are already scanned in
-  const jobId = mysql.escape(req.query.jobId);
-  const techId = mysql.escape(req.query.techId);
+  const jobId = mysql.escape(req.body.jobId);
+  const techId = mysql.escape(req.body.techId);
   const now = dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss");
 
   const selectSql = `${'SELECT * FROM TASKS WHERE idC = 1 and IDJOBS = '}
@@ -68,23 +68,23 @@ app.put('/api/scan', (req, res) => {
     if (typeof idForUpdate === 'string') { // need to follow the scan In flow
       const insertSql = 'INSERT INTO TASKS '
         + ' (idC, idJobs, idPerson, startDate) '
-        + ' values ( ' + idC + ', ' + mysql.escape(req.query.jobId)
-        + ', ' + mysql.escape(req.query.techId)
+        + ' values ( ' + idC + ', ' + mysql.escape(req.body.jobId)
+        + ', ' + mysql.escape(req.body.techId)
         + ", '" + now + "')";
       con.query(insertSql, function (err, result) {
         if (err) throw err;
-        res.end('Success');
+        res.end(JSON.stringify('scanIn'));
       });
     } else {
-      res.end('Need to call Scan Out');
+      res.end(JSON.stringify('scanOut'));
     }
   });
 });
 
 app.put('/api/scanOut', (req, res) => {
-  const jobId = mysql.escape(req.query.jobId);
-  const techId = mysql.escape(req.query.techId);
-  const comment = mysql.escape(req.query.comment);
+  const jobId = mysql.escape(req.body.jobId);
+  const techId = mysql.escape(req.body.techId);
+  const comment = mysql.escape(req.body.comment);
   let idForUpdate = 'empty';
   const now = dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss");
   const selectSql = `${'SELECT * FROM TASKS WHERE idC = 1 and IDJOBS = '}
@@ -99,7 +99,7 @@ app.put('/api/scanOut', (req, res) => {
       comments = ${comment} WHERE ${clause}`;
     con.query(updateSql, (err, result2) => {
       if (err) throw err;
-      res.end('Success');
+      res.end(JSON.stringify('success'));
     });
   });
 });

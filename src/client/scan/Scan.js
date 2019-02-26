@@ -37,8 +37,8 @@ export default class Scan extends Component {
     const codes = extractParameters(qrCode); // convert URL into IDs object
     // POST the ids to '/api/tasks'
     // as JSON, like this: { idc: "1", techId: "1", jobId: "1" }
-    fetch(`${API}/tasks`, {
-      method: 'POST',
+    fetch(`${API}/scan`, {
+      method: 'PUT',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ export default class Scan extends Component {
       })
       .then(result => { // "then", when the then() function above returns, do this (continue the chain of success)
         this.setState({ isLoading: false });
-        this.processScan(result);
+        this.processScan(result, codes);
         // this.getCustomers();
       })
       .catch(error => { // if we get an Error from above
@@ -64,28 +64,29 @@ export default class Scan extends Component {
       });
   }
 
-  processScan(result) {
-    const scanStatus = result.action ? result.action : false;
+  processScan(result, codes) {
+    const scanStatus = result ? result : false;
     const stateResult = { scanStatus };
     if (scanStatus) {
-      stateResult.scanResult = result;
+      stateResult.scanResult = Object.assign(result, codes);
     }
     this.setState(stateResult);
-
   }
 
   render() {
     const { scanStatus, scanResult } = this.state;
     // render Scan - define video element & attach reference object
+    const title = scanStatus ? scanStatus === 'scanIn' ? 'Scanned In' : 'Scan Out' : 'Scan';
     return (
       <div>
-        <SectionHeader title="Scan" button={{ action: () => this.sendCodeScan('techId=1&jobId=1'), title: "Send Test" }} />
+        <SectionHeader title={title} />
         {!scanStatus &&
-          <video muted autoPlay playsInline ref={this.videoElem}></video>
+          <video muted autoPlay playsInline ref={this.videoElem} className="scanCamera"></video>
         }
         {scanStatus && scanResult &&
-          <ScanForm scanStatus={scanStatus} scanResult={scanResult} doneFunc={() => this.processScan({})} />
+          <ScanForm scanStatus={scanStatus} scanResult={scanResult} doneFunc={() => this.processScan(false)} />
         }
+        <button className="btn btn-link" onClick={() => this.sendCodeScan('techId=1&jobId=1')} style={{ position: 'absolute', bottom: '40px', left: 0 }}>test</button>
       </div>
     );
   }
