@@ -16,20 +16,20 @@ export default class MopedTable extends Component {
     const { isPager } = this.state;
     const text = event.target.value.toString().toLowerCase();
     let resultData;
-    let showClearButton;
+    let hasSearchResults;
 
     if (!text.length) {
       resultData = this.props.data;
-      showClearButton = false;
+      hasSearchResults = false;
     } else {
       // Search!
       resultData = this.filterTableData(text);
-      showClearButton = true;
+      hasSearchResults = true;
     }
     if (isPager) {
       this.setState({ currentPage: 1 });
     }
-    this.setState({ data: resultData, showClearButton });
+    this.setState({ data: resultData, hasSearchResults });
   }
 
   filterTableData = text => {
@@ -60,11 +60,11 @@ export default class MopedTable extends Component {
 
   MopedSearchHeader = () => {
     const { config } = this.props;
-    const { searchText, showClearButton } = this.state;
+    const { searchText, hasSearchResults } = this.state;
     return (
       <div className="searchHeader col-sm-8 col-md-9">
         <TextInput className="mb-0" placeholder="Search" onChange={this.searchInput} value={searchText} name="searchText" />
-        {showClearButton &&
+        {hasSearchResults &&
           <button className="close" onClick={this.clearSearch}><span aria-hidden="true">&times;</span></button>
         }
       </div>
@@ -77,13 +77,14 @@ export default class MopedTable extends Component {
     let { tableCount = 'All' } = this.state;
     const tableCountOptions = [1, 5, 10, 25, 'All'];
     tableCount = tableCountOptions.includes(tableCount) ? tableCount : 'All';
+    const className = config.searchable ? 'col-sm-4 col-md-3' : 'col-sm-12';
     const handleChange = (event) => {
       const pageLimit = event.target.value === 'All' ? data.length : event.target.value - 0;
       const isPager = pageLimit < data.length;
       this.setState({ tableCount: pageLimit, currentPage: 1, isPager });
     }
     return (
-      <div className="col-sm-4 col-md-3">
+      <div className={className}>
         <Select label="Show" name="tableCount" className="mb-0 pager-select justify-content-md-end" options={tableCountOptions} showEmptyOption={false} value={tableCount} inline onChange={(e) => handleChange(e)} />
       </div>
     );
@@ -130,7 +131,6 @@ export default class MopedTable extends Component {
   }
 
   getPageData() {
-    const { config } = this.props;
     const { currentPage = 1, data, isPager, tableCount = data.length } = this.state;
     if (isPager) {
       const rowStart = (currentPage - 1) * tableCount;
@@ -142,12 +142,13 @@ export default class MopedTable extends Component {
 
   render() {
     const { config } = this.props;
-    const { isPager } = this.state;
+    const { hasSearchResults, isPager } = this.state;
     const displayData = this.getPageData();
+    const hasResults = displayData && displayData.length > 0;
 
     return (
       <table className="table table-striped">
-        {(config.tableHeader || config.searchable || config.pager) &&
+        {(hasResults || hasSearchResults) && (config.tableHeader || config.searchable || config.pager) &&
           <thead>
             {(config.searchable || config.pager) &&
               <tr>
@@ -169,7 +170,7 @@ export default class MopedTable extends Component {
           </thead>
         }
         <tbody>
-          {displayData && displayData.length > 0 && displayData.map((item, idx) => {
+          {hasResults && displayData.map((item, idx) => {
             return (
               <tr onClick={() => { return config.rowClick ? config.rowClick(item) : null; }} className={config.rowClick ? 'row-click' : ''} key={`row${idx}`}>
                 {config.columns.map(column => {
@@ -178,7 +179,7 @@ export default class MopedTable extends Component {
               </tr>
             )
           })}
-          {(!displayData || !displayData.length) &&
+          {!hasResults &&
             <tr><td colSpan={config.columns.length}>{config.text && config.text.noResults ? config.text.noResults : 'No Data'}</td></tr>
           }
         </tbody>

@@ -175,6 +175,16 @@ app.get('/api/customer', function (req, res) {
 	});
 });
 
+app.get('/api/job', function (req, res) {
+  const id = req.query.jobId;
+  const sql = 'SELECT * FROM jobs WHERE idJobs = ' + mysql.escape(id);
+  con.query(sql, function (err, result) {
+    if (err) throw err;
+    res.end(JSON.stringify(result));
+  });
+});
+
+
 app.post('/addPartToJob', function (req, res) {
 	// Insert part row for job if action =add, 
 	// post is: /addPartToJob&action=edit
@@ -229,7 +239,17 @@ app.post('/addJob', function (req, res) {
 		if (err) throw err;
 		res.end(JSON.stringify(result));
 	});
+});
 
+// /api/partsByJob?jobId=1
+app.get('/api/partsByJob', (req, res) => {
+  const id = req.query.jobId;
+  const sql = `SELECT * FROM parts WHERE idJobs = ${mysql.escape(id)}`;
+  // eslint-disable-next-line func-names
+  con.query(sql, (err, result) => {
+    if (err) throw err;
+    res.end(JSON.stringify(result));
+  });
 });
 
 app.post('/addTask', function (req, res) {

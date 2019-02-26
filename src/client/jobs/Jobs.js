@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
-import { API } from './App';
-import SectionHeader from './components/SectionHeader';
-import MopedTable from './components/MopedTable';
+import { API } from '../App';
+import SectionHeader from '../components/SectionHeader';
+import MopedTable from '../components/MopedTable';
 
 export default class Jobs extends Component {
 
@@ -13,7 +13,7 @@ export default class Jobs extends Component {
     },
     pager: true,
     searchable: true,
-    // rowClick: (customer) => this.customerClick(customer),
+    rowClick: (job) => this.jobClick(job),
     columns: [
       {
         key: 'idCustomers',
@@ -59,6 +59,9 @@ export default class Jobs extends Component {
       .catch(error => this.setState({ error, isLoading: false }));
   }
 
+  jobClick(job) {
+    this.props.history.push(`/jobs/${job.idJobs}`)
+  }
 
   render() {
     const { data, isLoading, name, showForm } = this.state;

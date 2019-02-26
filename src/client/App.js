@@ -6,7 +6,8 @@ import './main.scss';
 import Customers from './customers/Customers';
 import CustomerForm from './customers/CustomerForm';
 import CustomerDetail from './customers/CustomerDetail';
-import Jobs from './Jobs';
+import Jobs from './jobs/Jobs';
+import JobDetail from './jobs/JobDetail';
 import Scan from './scan/Scan';
 
 export const API = '/api';
@@ -51,8 +52,9 @@ export default class App extends Component {
               <Route exact path="/customers/:customerId(\d+)" component={CustomerDetail} />
               <Route exact path="/customers/add" component={CustomerForm} />
               <Route exact path="/customers" component={Customers} />
-              <Route path="/jobs" component={Jobs} />
-              <Route path="/scan" component={Scan} />
+              <Route exact path="/jobs/:jobId(\d+)" component={JobDetail} />
+              <Route exact path="/jobs" component={Jobs} />
+              <Route exact path="/scan" component={Scan} />
             </div>
           </div>
           <footer className="footer mt-auto py-1 bg-dark">
