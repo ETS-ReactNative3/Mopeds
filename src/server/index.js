@@ -153,12 +153,12 @@ app.post('/api/editCustomer', (req, res) => {
   const custZip = req.query.custZip;
   const sql = `${'UPDATE CUSTOMERS SET '
     + ' nameFirst = '}${mysql.escape(custFN)
-  }, nameLast = ${mysql.escape(custLN)
-  }, address = ${mysql.escape(custAddr)
-  }, city = ${mysql.escape(custCity)
-  }, state = ${mysql.escape(custState)
-  }, zip = ${mysql.escape(custZip)
-  } WHERE IDCUSTOMERS = ${
+    }, nameLast = ${mysql.escape(custLN)
+    }, address = ${mysql.escape(custAddr)
+    }, city = ${mysql.escape(custCity)
+    }, state = ${mysql.escape(custState)
+    }, zip = ${mysql.escape(custZip)
+    } WHERE IDCUSTOMERS = ${
     mysql.escape(custId)}`;
   con.query(sql, (err, result) => {
     if (err) throw err;
@@ -167,12 +167,12 @@ app.post('/api/editCustomer', (req, res) => {
 });
 
 app.get('/api/customer', function (req, res) {
-	const id = req.query.custId;
-	const sql = 'SELECT * FROM customers WHERE idCustomers = ' + mysql.escape(id);
-	con.query(sql, function (err, result) {
-		if (err) throw err;
-		res.end(JSON.stringify(result));
-	});
+  const id = req.query.custId;
+  const sql = 'SELECT * FROM customers WHERE idCustomers = ' + mysql.escape(id);
+  con.query(sql, function (err, result) {
+    if (err) throw err;
+    res.end(JSON.stringify(result));
+  });
 });
 
 app.get('/api/job', function (req, res) {
@@ -186,59 +186,59 @@ app.get('/api/job', function (req, res) {
 
 
 app.post('/addPartToJob', function (req, res) {
-	// Insert part row for job if action =add, 
-	// post is: /addPartToJob&action=edit
-	const jobId = req.query.jobId;
-	const personId = req.query.personId;
-	const vendor = req.query.vendor;
-	const price = req.query.price;
-	const quantity = req.query.quantity;
-	const dateCreated = dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss");
-	const status = "Ordered";
-	if (req.query.action === "add") {
+  // Insert part row for job if action =add, 
+  // post is: /addPartToJob&action=edit
+  const jobId = req.query.jobId;
+  const personId = req.query.personId;
+  const vendor = req.query.vendor;
+  const price = req.query.price;
+  const quantity = req.query.quantity;
+  const dateCreated = dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss");
+  const status = "Ordered";
+  if (req.query.action === "add") {
 
-		const sql = "INSERT INTO PARTS " +
-			" (idJobs, " +
-			" idPerson, " +
-			" vendor, " +
-			" price, " +
-			" quantity, " +
-			" status, " +
-			" dateCreated) " +
-			" values " +
-			" ( " + mysql.escape(jobId) + "," +
-			mysql.escape(personId) + "," +
-			mysql.escape(vendor) + "," +
-			mysql.escape(price) + "," +
-			mysql.escape(quantity) + ",'" +
-			status + "'," + "'" + dateCreated + "')";
-		con.query(sql, function (err, result) {
-			if (err) throw err;
-			res.end(JSON.stringify(result));
-		});
-	}
+    const sql = "INSERT INTO PARTS " +
+      " (idJobs, " +
+      " idPerson, " +
+      " vendor, " +
+      " price, " +
+      " quantity, " +
+      " status, " +
+      " dateCreated) " +
+      " values " +
+      " ( " + mysql.escape(jobId) + "," +
+      mysql.escape(personId) + "," +
+      mysql.escape(vendor) + "," +
+      mysql.escape(price) + "," +
+      mysql.escape(quantity) + ",'" +
+      status + "'," + "'" + dateCreated + "')";
+    con.query(sql, function (err, result) {
+      if (err) throw err;
+      res.end(JSON.stringify(result));
+    });
+  }
 
 
 });
 
 app.post('/addJob', function (req, res) {
-	const cId = req.body.custId;
-	const jDesc = req.body.jobDesc;
-	const pId = req.body.personId;
+  const cId = req.body.custId;
+  const jDesc = req.body.jobDesc;
+  const pId = req.body.personId;
 
-	const sql = "INSERT INTO JOBS " +
-		" (idCustomers, " +
-		" description, " +
-		" idPerson) " +
-		" values " +
-		" ( " + mysql.escape(cId) + "," +
-		mysql.escape(jDesc) + "," +
-		mysql.escape(pId) + ")";
+  const sql = "INSERT INTO JOBS " +
+    " (idCustomers, " +
+    " description, " +
+    " idPerson) " +
+    " values " +
+    " ( " + mysql.escape(cId) + "," +
+    mysql.escape(jDesc) + "," +
+    mysql.escape(pId) + ")";
 
-	con.query(sql, function (err, result) {
-		if (err) throw err;
-		res.end(JSON.stringify(result));
-	});
+  con.query(sql, function (err, result) {
+    if (err) throw err;
+    res.end(JSON.stringify(result));
+  });
 });
 
 // /api/partsByJob?jobId=1
@@ -253,26 +253,26 @@ app.get('/api/partsByJob', (req, res) => {
 });
 
 app.post('/addTask', function (req, res) {
-	const jId = req.body.jobId;
-	const pId = req.body.personId;
-	const sDate = req.body.startDate;
-	const eDate = req.body.endDate;
+  const jId = req.body.jobId;
+  const pId = req.body.personId;
+  const sDate = req.body.startDate;
+  const eDate = req.body.endDate;
 
-	const sql = "INSERT INTO TASKS " +
-		" (idJobs, " +
-		" idPerson, " +
-		" startDate, " +
-		" endDate) " +
-		" values " +
-		" ( " + mysql.escape(jId) + "," +
-		mysql.escape(pId) + "," +
-		mysql.escape(sDate) + "," +
-		mysql.escape(eDate) + ")";
+  const sql = "INSERT INTO TASKS " +
+    " (idJobs, " +
+    " idPerson, " +
+    " startDate, " +
+    " endDate) " +
+    " values " +
+    " ( " + mysql.escape(jId) + "," +
+    mysql.escape(pId) + "," +
+    mysql.escape(sDate) + "," +
+    mysql.escape(eDate) + ")";
 
-	con.query(sql, function (err, result) {
-		if (err) throw err;
-		res.end(JSON.stringify(result));
-	});
+  con.query(sql, function (err, result) {
+    if (err) throw err;
+    res.end(JSON.stringify(result));
+  });
 
 });
 
@@ -291,8 +291,8 @@ function getRowId(sql, callback) {
 })*/
 
 const server = app.listen(8081, function () {
-	const host = server.address().address
-	const port = server.address().port
+  const host = server.address().address
+  const port = server.address().port
 
-	console.log("listening at http://%s:%s", host, port)
+  console.log("listening at http://%s:%s", host, port)
 })
