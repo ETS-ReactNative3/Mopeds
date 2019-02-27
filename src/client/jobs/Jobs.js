@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { API } from '../App';
 import SectionHeader from '../components/SectionHeader';
 import MopedTable from '../components/MopedTable';
+import { mopedGET } from '../Utils';
 
 export default class Jobs extends Component {
 
@@ -46,14 +47,7 @@ export default class Jobs extends Component {
 
   getJobs() {
     this.setState({ isLoading: true });
-    fetch(`${API}/jobs`)
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('Something went wrong ...');
-        }
-      })
+    mopedGET('/jobs')
       .then(data => this.setState({ data, isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
   }

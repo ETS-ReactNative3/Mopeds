@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { API } from '../App';
 import SectionHeader from '../components/SectionHeader';
 import QrScanner from '../components/qr-scanner/qr-scanner.min';
 import ScanForm from './ScanForm';
+import { mopedPUT } from '../Utils';
 
 function extractParameters(codeUrl) {
   // convert parameterized url into object:
@@ -33,29 +33,12 @@ export default class Scan extends Component {
   }
 
   sendCodeScan(qrCode) {
+    this.setState({ isLoading: true });
     const codes = extractParameters(qrCode); // convert URL into IDs object
-    // POST the ids to '/api/tasks'
-    // as JSON, like this: { idc: "1", techId: "1", jobId: "1" }
-    fetch(`${API}/scan`, {
-      method: 'PUT',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(codes)
-    }) // do the fetch now
-      .then(response => { // "then", when the response comes back, do this with it
-        // console.log('post response: ', response);
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('Something went wrong ...');
-        }
-      })
-      .then(result => { // "then", when the then() function above returns, do this (continue the chain of success)
+    mopedPUT('/scan', codes)
+      .then(result => { // "then" do this (continue the chain of success)
         this.setState({ isLoading: false });
         this.processScan(result, codes);
-        // this.getCustomers();
       })
       .catch(error => { // if we get an Error from above
         this.setState({ isLoading: false });
@@ -73,11 +56,11 @@ export default class Scan extends Component {
   }
 
   render() {
-    const { scanStatus, scanResult } = this.state;
+    const { isLoading, scanStatus, scanResult } = this.state;
     // render Scan - define video element & attach reference object
     const title = scanStatus ? scanStatus === 'scanIn' ? 'Scanned In' : 'Scan Out' : 'Scan';
     return (
-      <div>
+      <div className={isLoading ? 'loading' : ''}>
         <SectionHeader title={title} />
         {!scanStatus &&
           <video muted autoPlay playsInline ref={this.videoElem} className="scanCamera"></video>

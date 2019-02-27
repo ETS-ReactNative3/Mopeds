@@ -10,8 +10,6 @@ import Jobs from './jobs/Jobs';
 import JobDetail from './jobs/JobDetail';
 import Scan from './scan/Scan';
 
-export const API = '/api';
-
 export default class App extends Component {
 
   componentDidMount() {

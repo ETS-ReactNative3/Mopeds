@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { API } from '../App';
 import SectionHeader from '../components/SectionHeader';
 import MopedTable from '../components/MopedTable';
+import { mopedGET } from '../Utils';
 
 export default class Customers extends Component {
 
@@ -15,34 +15,13 @@ export default class Customers extends Component {
     pageRows: 10,
     searchable: true,
     columns: [
-      {
-        key: 'idCustomers',
-        title: 'Customer ID'
-      },
-      {
-        key: 'nameFirst',
-        title: 'First Name'
-      },
-      {
-        key: 'nameLast',
-        title: 'Last Name'
-      },
-      {
-        key: 'address',
-        title: 'Address'
-      },
-      {
-        key: 'city',
-        title: 'City'
-      },
-      {
-        key: 'state',
-        title: 'State'
-      },
-      {
-        key: 'zip',
-        title: 'Zip Code'
-      }
+      { key: 'idCustomers', title: 'Customer ID' },
+      { key: 'nameFirst', title: 'First Name' },
+      { key: 'nameLast', title: 'Last Name' },
+      { key: 'address', title: 'Address' },
+      { key: 'city', title: 'City' },
+      { key: 'state', title: 'State' },
+      { key: 'zip', title: 'Zip Code' }
     ]
   };
 
@@ -57,14 +36,7 @@ export default class Customers extends Component {
 
   getCustomers() {
     this.setState({ isLoading: true });
-    fetch(`${API}/customers`)
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('Something went wrong ...');
-        }
-      })
+    mopedGET('/customers')
       .then(data => this.setState({ data, isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
   }

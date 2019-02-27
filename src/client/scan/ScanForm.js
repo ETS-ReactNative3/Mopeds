@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { API } from '../App';
 import TextInput from '../components/form/TextInput';
 import TextArea from '../components/form/TextArea';
+import { mopedPUT } from '../Utils';
 
 export default class ScanForm extends Component {
 
@@ -26,21 +26,7 @@ export default class ScanForm extends Component {
         .map(field => body[field] = this.state[field]);
 
       this.setState({ isLoading: true });
-      fetch(`${API}/scanOut`, {
-        method: 'PUT',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body)
-      })
-        .then(response => {
-          if (response.ok) {
-            return response.json();
-          } else {
-            throw new Error('Something went wrong ...', response);
-          }
-        })
+      mopedPUT('/scanOut', body)
         .then(() => {
           this.setState({ isLoading: false });
           this.doneFunc();

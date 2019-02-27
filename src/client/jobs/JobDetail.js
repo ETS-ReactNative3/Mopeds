@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { API } from '../App';
 import SectionHeader from '../components/SectionHeader';
 import PartForm from '../parts/PartForm';
 import MopedTable from '../components/MopedTable';
+import { mopedGET } from '../Utils';
 
 export default class JobDetail extends Component {
   jobId = this.props.match.params.jobId;
@@ -58,14 +58,7 @@ export default class JobDetail extends Component {
 
   getJob() {
     this.setState({ isLoading: true });
-    fetch(`${API}/job?jobId=${this.jobId}`)
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('Something went wrong ...');
-        }
-      })
+    mopedGET(`/job?jobId=${this.jobId}`)
       .then(data => {
         const jobData = this.convertJobSql(data);
         this.setState({ data: jobData, isLoading: false });
@@ -75,14 +68,7 @@ export default class JobDetail extends Component {
 
   getJobParts() {
     this.setState({ isLoading: true });
-    fetch(`${API}/partsByJob?jobId=${this.jobId}`)
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('Something went wrong ...');
-        }
-      })
+    mopedGET(`/partsByJob?jobId=${this.jobId}`)
       .then(data => {
         this.setState({ parts: data, isLoading: false });
       })
@@ -91,14 +77,7 @@ export default class JobDetail extends Component {
 
   getJobTasks() {
     this.setState({ isLoading: true });
-    fetch(`${API}/tasksByJob?jobId=${this.jobId}`)
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('Something went wrong ...');
-        }
-      })
+    mopedGET(`/tasksByJob?jobId=${this.jobId}`)
       .then(data => {
         this.setState({ tasks: data, isLoading: false });
       })

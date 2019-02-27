@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { withRouter } from "react-router-dom";
 import { API } from '../App';
 import SectionHeader from '../components/SectionHeader';
 import CustomerForm from './CustomerForm';
 import MopedTable from '../components/MopedTable';
+import { mopedGET } from '../Utils';
 
 export default class CustomerDetail extends Component {
   customerId = this.props.match.params.customerId;
@@ -43,14 +43,7 @@ export default class CustomerDetail extends Component {
 
   getCustomer() {
     this.setState({ isLoading: true });
-    fetch(`${API}/customer?custId=${this.customerId}`)
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('Something went wrong ...');
-        }
-      })
+    mopedGET(`/customer?custId=${this.customerId}`)
       .then(data => {
         const customerData = this.convertCustomerSql(data);
         this.setState({ data: customerData, isLoading: false });
@@ -60,14 +53,7 @@ export default class CustomerDetail extends Component {
 
   getCustomerJobs() {
     this.setState({ isLoading: true });
-    fetch(`${API}/jobsByCustomer?custId=${this.customerId}`)
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('Something went wrong ...');
-        }
-      })
+    mopedGET(`/jobsByCustomer?custId=${this.customerId}`)
       .then(data => {
         this.setState({ jobs: data, isLoading: false });
       })

@@ -3,7 +3,7 @@ import { API } from '../App';
 import SectionHeader from '../components/SectionHeader';
 import TextInput from '../components/form/TextInput';
 import Select from '../components/form/Select';
-import { US_STATES } from '../Utils';
+import { US_STATES, mopedPUT, mopedPOST } from '../Utils';
 
 export default class CustomerForm extends Component {
 
@@ -19,10 +19,11 @@ export default class CustomerForm extends Component {
   }
 
   handleSubmit(event) {
-    const body = {};
-    let action = 'addCustomer';
     event.preventDefault();
 
+    const body = {};
+    const action = this.props.customer ? '/editCustomer' : '/addCustomer';
+    const mopedMethod = this.props.customer ? mopedPUT : mopedPOST;
     const addCustomerFields = [
       'custFirstName',
       'custLastName',
@@ -35,26 +36,8 @@ export default class CustomerForm extends Component {
     addCustomerFields
       .map(field => body[field] = this.state[field]);
 
-    if (this.props.customer) {
-      action = 'editCustomer';
-      body.action = 'edit';
-    }
     this.setState({ isLoading: true });
-    fetch(`${API}/${action}`, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body)
-    })
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('Something went wrong ...', response);
-        }
-      })
+    mopedMethod(action, body)
       .then(() => {
         this.setState({ isLoading: false });
         this.doneFunc();

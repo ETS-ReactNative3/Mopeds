@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { API } from '../App';
 import SectionHeader from '../components/SectionHeader';
 import TextInput from '../components/form/TextInput';
+import { mopedPOST, mopedPUT } from '../Utils';
 
 export default class PartForm extends Component {
 
@@ -17,14 +17,14 @@ export default class PartForm extends Component {
   }
 
   handleSubmit(event) {
-    const body = {
-      jobId: this.props.jobId,
-      personId: this.props.personId,
-      action: 'add'
-    };
-    let action = 'addPartToJob';
     event.preventDefault();
-
+    const body = {
+      idParts: this.props.part.idParts,
+      jobId: this.props.jobId,
+      personId: this.props.personId
+    };
+    const action = this.props.part ? '/editPart' : '/addPartToJob';
+    const mopedMethod = this.props.part ? mopedPUT : mopedPOST;
     const addPartFields = [
       'vendor',
       'price',
@@ -33,26 +33,8 @@ export default class PartForm extends Component {
     addPartFields
       .map(field => body[field] = this.state[field]);
 
-    if (this.props.part) {
-      action = 'editPart';
-      body.action = 'edit';
-    }
     this.setState({ isLoading: true });
-    fetch(`${API}/${action}`, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body)
-    })
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('Something went wrong ...', response);
-        }
-      })
+    mopedMethod(action, body)
       .then(() => {
         this.setState({ isLoading: false });
         this.doneFunc();

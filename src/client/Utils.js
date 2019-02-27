@@ -1,4 +1,5 @@
 /* Constants */
+export const API = '/api';
 export const US_STATES = ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'];
 
 /* Utility Functions */
@@ -23,4 +24,35 @@ export function formatMoney(amount, thousands = ",") {
   } catch (e) {
     console.warn(e)
   }
+}
+
+/* REST communications */
+function mopedREST(method, options) {
+  return fetch(`${API}${options.url}`, {
+    method,
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(options.body)
+  })
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error('Something went wrong ...', response);
+      }
+    })
+}
+export function mopedGET(url) {
+  return mopedREST('GET', { url });
+}
+export function mopedPOST(url, body) {
+  return mopedREST('POST', { url, body });
+}
+export function mopedPUT(url, body) {
+  return mopedREST('PUT', { url, body });
+}
+export function mopedDELETE(options) {
+  return mopedREST('DELETE', options);
 }
