@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from "react-router-dom";
 import { API } from '../App';
 import SectionHeader from '../components/SectionHeader';
-import CustomerForm from '../customers/CustomerForm';
+import PartForm from '../parts/PartForm';
 import MopedTable from '../components/MopedTable';
 
 export default class JobDetail extends Component {
@@ -117,12 +117,18 @@ export default class JobDetail extends Component {
   editJobForm() {
     this.setState({ showEdit: !this.state.showEdit });
   }
+  showPartForm() {
+    this.setState({ showPartForm: !this.state.showPartForm });
+  }
   doneJobForm() {
+    this.showPartForm();
     this.renderJob();
   }
 
   render() {
-    const { data, isLoading, parts, showEdit, tasks } = this.state;
+    console.log('render');
+    const { data, isLoading, parts, showEdit, showPartForm, tasks } = this.state;
+    console.log(parts && parts.length);
     return (
       <div className={isLoading ? 'loading' : ''}>
         {data &&
@@ -135,15 +141,20 @@ export default class JobDetail extends Component {
           <div className="col-md-12 mx-auto">
             {data.description}
             {parts &&
-              <div className="row mt-5">
+              <div className="row mt-4">
                 <div className="col-md-12">
-                  <SectionHeader title="Parts" sectionLevel="2" />
-                  <MopedTable data={parts} config={this.partsTableConfig} />
+                  <SectionHeader title="Parts" sectionLevel="2" button={{ action: () => this.showPartForm(), title: "Add Part" }} />
+                  {!showPartForm &&
+                    <MopedTable data={parts} config={this.partsTableConfig} />
+                  }
+                  {showPartForm &&
+                    <PartForm jobId={this.jobId} personId='1' cancelFunc={() => this.showPartForm()} doneFunc={() => this.doneJobForm()} />
+                  }
                 </div>
               </div>
             }
             {tasks &&
-              <div className="row mt-5">
+              <div className="row mt-3">
                 <div className="col-md-12">
                   <SectionHeader title="Tasks" sectionLevel="2" />
                   <MopedTable data={tasks} config={this.tasksTableConfig} />
@@ -151,9 +162,6 @@ export default class JobDetail extends Component {
               </div>
             }
           </div>
-        }
-        {data && showEdit &&
-          <CustomerForm customer={data} cancelFunc={() => this.editCustomerForm()} doneFunc={() => this.doneCustomerForm()} />
         }
       </div>
     );

@@ -185,17 +185,17 @@ app.get('/api/job', function (req, res) {
 });
 
 
-app.post('/addPartToJob', function (req, res) {
+app.post('/api/addPartToJob', function (req, res) {
   // Insert part row for job if action =add, 
   // post is: /addPartToJob&action=edit
-  const jobId = req.query.jobId;
-  const personId = req.query.personId;
-  const vendor = req.query.vendor;
-  const price = req.query.price;
-  const quantity = req.query.quantity;
+  const jobId = req.body.jobId;
+  const personId = req.body.personId;
+  const vendor = req.body.vendor;
+  const price = req.body.price;
+  const quantity = req.body.quantity;
   const dateCreated = dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss");
   const status = "Ordered";
-  if (req.query.action === "add") {
+  if (req.body.action === "add") {
 
     const sql = "INSERT INTO PARTS " +
       " (idJobs, " +

@@ -144,6 +144,13 @@ export default class MopedTable extends Component {
     return data;
   }
 
+  componentWillReceiveProps(newProps) {
+    // Any time props.data changes, update state
+    if (newProps.data !== this.props.data) {
+      this.setState({ data: newProps.data });
+    }
+  }
+
   render() {
     const { config } = this.props;
     const { hasSearchResults, isPager } = this.state;
