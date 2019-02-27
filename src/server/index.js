@@ -195,30 +195,43 @@ app.post('/api/addPartToJob', function (req, res) {
   const quantity = req.body.quantity;
   const dateCreated = dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss");
   const status = "Ordered";
-  if (req.body.action === "add") {
+  const sql = "INSERT INTO PARTS " +
+    " (idJobs, " +
+    " idPerson, " +
+    " vendor, " +
+    " price, " +
+    " quantity, " +
+    " status, " +
+    " dateCreated) " +
+    " values " +
+    " ( " + mysql.escape(jobId) + "," +
+    mysql.escape(personId) + "," +
+    mysql.escape(vendor) + "," +
+    mysql.escape(price) + "," +
+    mysql.escape(quantity) + ",'" +
+    status + "'," + "'" + dateCreated + "')";
+  con.query(sql, function (err, result) {
+    if (err) throw err;
+    res.end(JSON.stringify(result));
+  });
+});
 
-    const sql = "INSERT INTO PARTS " +
-      " (idJobs, " +
-      " idPerson, " +
-      " vendor, " +
-      " price, " +
-      " quantity, " +
-      " status, " +
-      " dateCreated) " +
-      " values " +
-      " ( " + mysql.escape(jobId) + "," +
-      mysql.escape(personId) + "," +
-      mysql.escape(vendor) + "," +
-      mysql.escape(price) + "," +
-      mysql.escape(quantity) + ",'" +
-      status + "'," + "'" + dateCreated + "')";
-    con.query(sql, function (err, result) {
-      if (err) throw err;
-      res.end(JSON.stringify(result));
-    });
-  }
-
-
+app.put('/api/editPart', (req, res) => {
+  // accept update to customer
+  const idParts = req.body.idParts;
+  const vendor = req.body.vendor;
+  const price = req.body.price;
+  const quantity = req.body.quantity;
+  const sql = `${'UPDATE PARTS SET '
+    + ' vendor = '}${mysql.escape(vendor)
+    }, price = ${mysql.escape(price)
+    }, quantity = ${mysql.escape(quantity)
+    } WHERE IDPARTS = ${
+    mysql.escape(idParts)}`;
+  con.query(sql, (err, result) => {
+    if (err) throw err;
+    res.end(JSON.stringify(result));
+  });
 });
 
 app.post('/addJob', function (req, res) {

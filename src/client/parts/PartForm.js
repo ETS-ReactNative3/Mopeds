@@ -64,7 +64,7 @@ export default class PartForm extends Component {
 
   render() {
     const { part, cancelFunc = () => this.cancelFunc() } = this.props;
-    const { isLoading, vendor, price, quantity, status, orderNumber } = this.state;
+    const { isLoading, vendor, price, quantity } = this.state;
     return (
       <div className={isLoading ? 'loading' : ''}>
         {!part &&

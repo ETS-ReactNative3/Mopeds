@@ -12,7 +12,7 @@ export default class JobDetail extends Component {
       noResults: "No Parts Found"
     },
     pageRows: 5,
-    // rowClick: (part) => this.partClick(part),
+    rowClick: (part) => this.partClick(part),
     columns: [
       { key: 'idParts', title: 'Part ID' },
       { key: 'idPerson', title: 'Person ID' },
@@ -84,6 +84,11 @@ export default class JobDetail extends Component {
       .catch(error => this.setState({ error, isLoading: false }));
   }
 
+  partClick(part) {
+    this.setState({ part });
+    this.showPartForm();
+  }
+
   convertJobSql(data) {
     return {
       customerId: data[0].idCustomers,
@@ -92,9 +97,6 @@ export default class JobDetail extends Component {
     }
   }
 
-  editJobForm() {
-    this.setState({ showEdit: !this.state.showEdit });
-  }
   showPartForm() {
     this.setState({ showPartForm: !this.state.showPartForm });
   }
@@ -104,7 +106,7 @@ export default class JobDetail extends Component {
   }
 
   render() {
-    const { data, isLoading, parts, showEdit, showPartForm, tasks } = this.state;
+    const { data, isLoading, parts, part = undefined, showEdit, showPartForm, tasks } = this.state;
     return (
       <div className={isLoading ? 'loading' : ''}>
         {data &&
@@ -124,7 +126,7 @@ export default class JobDetail extends Component {
                     <MopedTable data={parts} config={this.partsTableConfig} />
                   }
                   {showPartForm &&
-                    <PartForm jobId={this.jobId} personId='1' cancelFunc={() => this.showPartForm()} doneFunc={() => this.doneJobForm()} />
+                    <PartForm jobId={this.jobId} part={part} personId='1' cancelFunc={() => this.showPartForm()} doneFunc={() => this.doneJobForm()} />
                   }
                 </div>
               </div>
