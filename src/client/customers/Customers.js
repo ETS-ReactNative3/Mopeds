@@ -12,6 +12,7 @@ export default class Customers extends Component {
       noResults: "No Customers Found"
     },
     pager: true,
+    pageRows: 10,
     searchable: true,
     columns: [
       {

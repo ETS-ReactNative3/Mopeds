@@ -150,7 +150,7 @@ export default class JobDetail extends Component {
                 </div>
               </div>
             }
-            {tasks &&
+            {tasks && !showPartForm &&
               <div className="row mt-3">
                 <div className="col-md-12">
                   <SectionHeader title="Tasks" sectionLevel="2" />

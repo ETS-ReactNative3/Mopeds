@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import TextInput from '../components/form/TextInput';
 import Select from '../components/form/Select';
-import { formatMoney } from '../Utils';
+import { formatDate, formatDateTime, formatMoney } from '../Utils';
 
 export default class MopedTable extends Component {
 
@@ -67,9 +67,17 @@ export default class MopedTable extends Component {
     const { searchText, hasSearchResults } = this.state;
     return (
       <div className="searchHeader col-sm-8 col-md-9">
-        <TextInput className="mb-0" placeholder="Search" onChange={this.searchInput} value={searchText} name="searchText" />
+        <TextInput
+          className="mb-0"
+          placeholder="Search"
+          onChange={this.searchInput}
+          value={searchText}
+          name="searchText"
+        />
         {hasSearchResults &&
-          <button className="close" onClick={this.clearSearch}><span aria-hidden="true">&times;</span></button>
+          <button className="close" onClick={this.clearSearch}>
+            <span aria-hidden="true">&times;</span>
+          </button>
         }
       </div>
     );
@@ -89,7 +97,16 @@ export default class MopedTable extends Component {
     }
     return (
       <div className={className}>
-        <Select label="Show" name="tableCount" className="mb-0 pager-select justify-content-md-end" options={tableCountOptions} showEmptyOption={false} value={tableCount} inline onChange={(e) => handleChange(e)} />
+        <Select
+          label="Show"
+          name="tableCount"
+          className="mb-0 pager-select justify-content-md-end"
+          options={tableCountOptions}
+          showEmptyOption={false}
+          value={tableCount}
+          inline
+          onChange={(e) => handleChange(e)}
+        />
       </div>
     );
   };
@@ -117,7 +134,11 @@ export default class MopedTable extends Component {
                 </li>
               }
               {pageIndexes.map((n, i) => {
-                return (<li className={`page-item ${currentPage === i + 1 ? 'active' : ''}`} key={i}><a className="page-link" href="#" onClick={(e) => changePage(i + 1, e)}>{i + 1}</a></li>)
+                return (
+                  <li className={`page-item ${currentPage === i + 1 ? 'active' : ''}`} key={i}>
+                    <a className="page-link" href="#" onClick={(e) => changePage(i + 1, e)}>{i + 1}</a>
+                  </li>
+                )
               })}
               {currentPage !== pageCount &&
                 <li className="page-item">
@@ -153,14 +174,10 @@ export default class MopedTable extends Component {
 
   dataFormatter(data, format) {
     if (format === 'date') {
-      const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-      const date = data ? new Date(data) : data;
-      return date ? date.toLocaleDateString('en-US', options) : data;
+      return formatDate(data);
     }
     if (format === 'date-time') {
-      const options = { year: 'numeric', month: '2-digit', day: '2-digit', timeZone: 'America/Denver', hour12: true };
-      const date = data ? new Date(data) : data;
-      return date ? date.toLocaleTimeString('en-US', options) : data;
+      return formatDateTime(data);
     }
     if (format === 'amount') {
       return formatMoney(data);
@@ -200,15 +217,27 @@ export default class MopedTable extends Component {
         <tbody>
           {hasResults && displayData.map((item, idx) => {
             return (
-              <tr onClick={() => { return config.rowClick ? config.rowClick(item) : null; }} className={config.rowClick ? 'row-click' : ''} key={`row${idx}`}>
+              <tr
+                onClick={() => { return config.rowClick ? config.rowClick(item) : null; }}
+                className={config.rowClick ? 'row-click' : ''}
+                key={`row${idx}`}
+              >
                 {config.columns.map(column => {
-                  return (<td key={column.key} className={column.format ? `${column.format}` : undefined}>{column.format ? this.dataFormatter(item[column.key], column.format) : item[column.key]}</td>)
+                  return (
+                    <td key={column.key} className={column.format ? `${column.format}` : undefined}>
+                      {column.format ? this.dataFormatter(item[column.key], column.format) : item[column.key]}
+                    </td>
+                  )
                 })}
               </tr>
             )
           })}
           {!hasResults &&
-            <tr><td colSpan={config.columns.length}>{config.text && config.text.noResults ? config.text.noResults : 'No Data'}</td></tr>
+            <tr>
+              <td colSpan={config.columns.length}>
+                {config.text && config.text.noResults ? config.text.noResults : 'No Data'}
+              </td>
+            </tr>
           }
         </tbody>
         {hasResults && isPager &&
