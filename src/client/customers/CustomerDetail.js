@@ -91,21 +91,22 @@ export default class CustomerDetail extends Component {
         {data &&
           <SectionHeader
             title={`${data.custFirstName} ${data.custLastName}`}
-            hasBack={true}
             button={{ action: () => this.editCustomerForm(), title: "Edit Customer" }}
           />
         }
         {data && !showEdit &&
-          <div className="col-md-12 mx-auto">
-            {data.custAddress} - {data.custCity} - {data.custState} - {data.custZip}
-            {jobs &&
-              <div className="row mt-5">
-                <div className="col-md-12">
-                  <SectionHeader title="Jobs" sectionLevel="2" />
-                  <MopedTable data={jobs} config={this.jobsTableConfig} />
+          <div className="row">
+            <div className="col-md-12 mx-auto">
+              {data.custAddress} - {data.custCity} - {data.custState} - {data.custZip}
+              {jobs &&
+                <div className="row mt-4">
+                  <div className="col-md-12">
+                    <SectionHeader title="Jobs" sectionLevel="2" />
+                    <MopedTable data={jobs} config={this.jobsTableConfig} />
+                  </div>
                 </div>
-              </div>
-            }
+              }
+            </div>
           </div>
         }
         {data && showEdit &&

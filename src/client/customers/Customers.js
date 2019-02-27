@@ -15,7 +15,7 @@ export default class Customers extends Component {
     pageRows: 10,
     searchable: true,
     columns: [
-      { key: 'idCustomers', title: 'Customer ID' },
+      { key: 'idCustomers', title: 'ID' },
       { key: 'nameFirst', title: 'First Name' },
       { key: 'nameLast', title: 'Last Name' },
       { key: 'address', title: 'Address' },

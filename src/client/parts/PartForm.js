@@ -79,10 +79,9 @@ export default class PartForm extends Component {
   render() {
     const { cancelFunc = () => this.cancelFunc() } = this.props;
     const { isLoading, part, vendor, price, quantity } = this.state;
-    console.log('render ', part);
     return (
-      <div className={isLoading ? 'loading' : ''}>
-        <SectionHeader title={part ? 'Edit Part' : 'Add Part'} sectionLevel='3' />
+      <div className={isLoading ? 'loading col-sm-12' : 'col-sm-12'}>
+        <SectionHeader title={part ? 'Edit Part' : 'Add Part'} sectionLevel='3' button={{ action: () => cancelFunc(), title: 'Close', type: 'close' }} />
         <div className="row">
           <form className="col-md-11 mx-auto" onSubmit={event => this.handleSubmit(event)}>
             <div className="form-row">

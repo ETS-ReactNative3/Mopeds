@@ -121,35 +121,34 @@ export default class JobDetail extends Component {
     return (
       <div className={isLoading ? 'loading' : ''}>
         {data &&
-          <SectionHeader
-            title={`Job ${this.jobId}`}
-            hasBack={true}
-          />
+          <SectionHeader title={`Job ${this.jobId}`} />
         }
         {data && !showEdit &&
-          <div className="col-md-12 mx-auto">
-            {data.description}
-            {parts &&
-              <div className="row mt-4">
-                <div className="col-md-12">
-                  <SectionHeader title="Parts" sectionLevel="2" button={{ action: () => this.addPartForm(), title: "Add Part" }} />
-                  {!showPartForm &&
-                    <MopedTable data={parts} config={this.partsTableConfig} />
-                  }
-                  {showPartForm &&
-                    <PartForm jobId={this.jobId} part={part} personId='1' cancelFunc={() => this.hideEditForm()} doneFunc={() => this.doneJobForm()} />
-                  }
+          <div className="row">
+            <div className="col-md-12 mx-auto">
+              {data.description}
+              {parts &&
+                <div className="row mt-4">
+                  <div className="col-md-12">
+                    <SectionHeader title="Parts" sectionLevel="2" button={{ action: () => this.addPartForm(), title: "Add Part" }} />
+                    {!showPartForm &&
+                      <MopedTable data={parts} config={this.partsTableConfig} />
+                    }
+                    {showPartForm &&
+                      <PartForm jobId={this.jobId} part={part} personId='1' cancelFunc={() => this.hideEditForm()} doneFunc={() => this.doneJobForm()} />
+                    }
+                  </div>
                 </div>
-              </div>
-            }
-            {tasks && !showPartForm &&
-              <div className="row mt-3">
-                <div className="col-md-12">
-                  <SectionHeader title="Tasks" sectionLevel="2" />
-                  <MopedTable data={tasks} config={this.tasksTableConfig} />
+              }
+              {tasks && !showPartForm &&
+                <div className="row mt-3">
+                  <div className="col-md-12">
+                    <SectionHeader title="Tasks" sectionLevel="2" />
+                    <MopedTable data={tasks} config={this.tasksTableConfig} />
+                  </div>
                 </div>
-              </div>
-            }
+              }
+            </div>
           </div>
         }
       </div>

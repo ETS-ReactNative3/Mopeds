@@ -15,8 +15,9 @@ header {
 /* Headers */
 .section-header {
    button.back {
-    margin-left: -16px;
-    vertical-align: middle;
+    margin-left: -20px;
+    margin-right: 16px;
+    vertical-align: bottom;
     span.icon {
       display: inline-block;
       font-size: 1.6em;
@@ -43,7 +44,9 @@ header {
       font-size: 2em;
     }
     button.back {
-      margin-left: -8px;
+      vertical-align: top;
+      margin-left: -4px;
+      margin-right: 4px;
     }
   }
 }
