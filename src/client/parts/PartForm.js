@@ -12,14 +12,21 @@ export default class PartForm extends Component {
 
   componentDidMount() {
     if (this.props.part) {
-      this.setState({ ...this.state, ...this.props.part });
+      this.setState({ ...this.state, ...this.props.part, part: this.props.part });
+    }
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (newProps.part !== this.props.part) {
+      const basicPart = { vendor: undefined, price: undefined, quantity: undefined }
+      Object.assign(basicPart, newProps.part);
+      this.setState({ part: newProps.part, ...basicPart });
     }
   }
 
   handleSubmit(event) {
     event.preventDefault();
     const body = {
-      idParts: this.props.part.idParts,
       jobId: this.props.jobId,
       personId: this.props.personId
     };
@@ -30,6 +37,9 @@ export default class PartForm extends Component {
       'price',
       'quantity'
     ];
+    if (this.state.part) {
+      body.idParts = this.state.part.idParts
+    }
     addPartFields
       .map(field => body[field] = this.state[field]);
 
@@ -67,8 +77,9 @@ export default class PartForm extends Component {
   }
 
   render() {
-    const { part, cancelFunc = () => this.cancelFunc() } = this.props;
-    const { isLoading, vendor, price, quantity } = this.state;
+    const { cancelFunc = () => this.cancelFunc() } = this.props;
+    const { isLoading, part, vendor, price, quantity } = this.state;
+    console.log('render ', part);
     return (
       <div className={isLoading ? 'loading' : ''}>
         <SectionHeader title={part ? 'Edit Part' : 'Add Part'} sectionLevel='3' />

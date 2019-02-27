@@ -99,13 +99,17 @@ export default class JobDetail extends Component {
 
   addPartForm() {
     if (this.state.part) {
-      this.showPartForm();
       this.setState({ part: undefined });
+    } else {
+      this.showPartForm();
     }
-    setTimeout(() => this.showPartForm(), 1);
   }
   showPartForm() {
     this.setState({ showPartForm: !this.state.showPartForm });
+  }
+  hideEditForm() {
+    this.showPartForm();
+    this.setState({ part: undefined });
   }
   doneJobForm() {
     this.showPartForm();
@@ -133,7 +137,7 @@ export default class JobDetail extends Component {
                     <MopedTable data={parts} config={this.partsTableConfig} />
                   }
                   {showPartForm &&
-                    <PartForm jobId={this.jobId} part={part} personId='1' cancelFunc={() => this.showPartForm()} doneFunc={() => this.doneJobForm()} />
+                    <PartForm jobId={this.jobId} part={part} personId='1' cancelFunc={() => this.hideEditForm()} doneFunc={() => this.doneJobForm()} />
                   }
                 </div>
               </div>
