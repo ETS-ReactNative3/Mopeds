@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { HashRouter, Route, Link } from "react-router-dom";
+import { HashRouter, Route, NavLink } from "react-router-dom";
 import 'bootstrap';
 import $ from 'jquery';
 import './main.scss';
@@ -28,20 +28,20 @@ export default class App extends Component {
           <div className="flex-shrink-0">
             <header>
               <nav className="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-                <Link to="/" className="navbar-brand">Mopeds</Link>
+                <NavLink to="/" className="navbar-brand">Mopeds</NavLink>
                 <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                   <span className="navbar-toggler-icon"></span>
                 </button>
                 <div className="collapse navbar-collapse" id="navbarCollapse">
                   <ul className="navbar-nav mr-auto">
                     <li className="nav-item">
-                      <Link to="/customers" className="nav-link">Customers</Link>
+                      <NavLink to="/customers" className="nav-link" activeClassName="active">Customers</NavLink>
                     </li>
                     <li className="nav-item">
-                      <Link to="/jobs" className="nav-link">Jobs</Link>
+                      <NavLink to="/jobs" className="nav-link" activeClassName="active">Jobs</NavLink>
                     </li>
                     <li className="nav-item">
-                      <Link to="/scan" className="nav-link">Scan</Link>
+                      <NavLink to="/scan" className="nav-link" activeClassName="active">Scan</NavLink>
                     </li>
                   </ul>
                 </div>
