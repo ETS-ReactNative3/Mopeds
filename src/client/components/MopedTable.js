@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import TextInput from '../components/form/TextInput';
 import Select from '../components/form/Select';
+import { formatMoney } from '../Utils';
 
 export default class MopedTable extends Component {
 
@@ -11,7 +12,6 @@ export default class MopedTable extends Component {
       stateData.tableCount = props.config.pageRows;
       stateData.isPager = true;
     }
-
     this.state = stateData;
   }
 
@@ -151,6 +151,23 @@ export default class MopedTable extends Component {
     }
   }
 
+  dataFormatter(data, format) {
+    if (format === 'date') {
+      const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+      const date = data ? new Date(data) : data;
+      return date ? date.toLocaleDateString('en-US', options) : data;
+    }
+    if (format === 'date-time') {
+      const options = { year: 'numeric', month: '2-digit', day: '2-digit', timeZone: 'America/Denver', hour12: true };
+      const date = data ? new Date(data) : data;
+      return date ? date.toLocaleTimeString('en-US', options) : data;
+    }
+    if (format === 'amount') {
+      return formatMoney(data);
+    }
+    return data;
+  }
+
   render() {
     const { config } = this.props;
     const { hasSearchResults, isPager } = this.state;
@@ -185,7 +202,7 @@ export default class MopedTable extends Component {
             return (
               <tr onClick={() => { return config.rowClick ? config.rowClick(item) : null; }} className={config.rowClick ? 'row-click' : ''} key={`row${idx}`}>
                 {config.columns.map(column => {
-                  return (<td key={column.key}>{item[column.key]}</td>)
+                  return (<td key={column.key} className={column.format ? `${column.format}` : undefined}>{column.format ? this.dataFormatter(item[column.key], column.format) : item[column.key]}</td>)
                 })}
               </tr>
             )

@@ -18,11 +18,11 @@ export default class JobDetail extends Component {
       { key: 'idParts', title: 'Part ID' },
       { key: 'idPerson', title: 'Person ID' },
       { key: 'vendor', title: 'Vendor' },
-      { key: 'price', title: 'Price' },
-      { key: 'quantity', title: 'Quantity' },
+      { key: 'price', title: 'Price', format: 'amount' },
+      { key: 'quantity', title: 'Quantity', format: 'count' },
       { key: 'status', title: 'Status' },
-      { key: 'dateCreated', title: 'Date Created' },
-      { key: 'dateUpdated', title: 'Date Updated' },
+      { key: 'dateCreated', title: 'Date Created', format: 'date-time' },
+      { key: 'dateUpdated', title: 'Date Updated', format: 'date-time' },
       { key: 'orderNumber', title: 'Order Number' }
     ]
   };
@@ -36,8 +36,8 @@ export default class JobDetail extends Component {
     columns: [
       { key: 'idTasks', title: 'Task ID' },
       { key: 'idPerson', title: 'Person ID' },
-      { key: 'startDate', title: 'Start Date' },
-      { key: 'endDate', title: 'End Date' },
+      { key: 'startDate', title: 'Start Date', format: 'date-time' },
+      { key: 'endDate', title: 'End Date', format: 'date-time' },
       { key: 'comments', title: 'Comments' }
     ]
   };
@@ -122,7 +122,7 @@ export default class JobDetail extends Component {
   }
   doneJobForm() {
     this.showPartForm();
-    this.renderJob();
+    this.getJobParts();
   }
 
   render() {
