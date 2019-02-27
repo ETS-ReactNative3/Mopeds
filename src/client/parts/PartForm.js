@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import { withRouter } from "react-router-dom";
 import { API } from '../App';
 import SectionHeader from '../components/SectionHeader';
 import TextInput from '../components/form/TextInput';
@@ -90,13 +89,13 @@ export default class PartForm extends Component {
           <SectionHeader title='Add Part' sectionLevel='3' />
         }
         <div className="row">
-          <form className="col-md-11 mx-auto" onSubmit={event => this.handleSubmit(event)} onChange={event => this.handleChange(event)}>
+          <form className="col-md-11 mx-auto" onSubmit={event => this.handleSubmit(event)}>
             <div className="form-row">
-              <TextInput label="Vendor" name="vendor" className="col-md-6" value={vendor} />
-              <TextInput label="Price" name="price" className="col-md-6" value={price} />
+              <TextInput label="Vendor" name="vendor" className="col-md-6" value={vendor} onChange={event => this.handleChange(event)} />
+              <TextInput label="Price" name="price" className="col-md-6" value={price} onChange={event => this.handleChange(event)} />
             </div>
             <div className="form-row">
-              <TextInput label="Quantity" name="quantity" className="col-md-6" value={quantity} />
+              <TextInput label="Quantity" name="quantity" className="col-md-6" value={quantity} onChange={event => this.handleChange(event)} />
             </div>
             <div className="button-group">
               <button type="submit" className="btn btn-primary">{part ? 'Save' : 'Add'}</button>

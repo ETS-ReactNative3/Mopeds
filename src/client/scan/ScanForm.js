@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { API } from '../App';
-import SectionHeader from '../components/SectionHeader';
 import TextInput from '../components/form/TextInput';
 import TextArea from '../components/form/TextArea';
 
@@ -21,7 +20,6 @@ export default class ScanForm extends Component {
       const addJobDescriptionFields = [
         'jobId',
         'techId',
-        'taskId',
         'comment'
       ];
       addJobDescriptionFields
@@ -69,14 +67,14 @@ export default class ScanForm extends Component {
     return (
       <div>
         <div className="row">
-          <form className="col-md-11 mx-auto" onSubmit={event => this.handleSubmit(event)} onChange={event => this.handleChange(event)}>
+          <form className="col-md-11 mx-auto" onSubmit={event => this.handleSubmit(event)}>
             <div className="form-row">
               <TextInput label="Tech ID" name="techId" className="col-md-6" value={scanResult.techId} plainText />
               <TextInput label="Job ID" name="jobId" className="col-md-6" value={scanResult.jobId} plainText />
             </div>
             {scanStatus === 'scanOut' &&
               <div className="form-row">
-                <TextArea label="Comments" name="comment" value={comment} className="col-md-12" />
+                <TextArea label="Comments" name="comment" value={comment} className="col-md-12" onChange={event => this.handleChange(event)} />
               </div>
             }
             <button type="submit" className="btn btn-primary col-sm col-md-2">{scanStatus === 'scanOut' ? 'Save' : 'Ok'}</button>

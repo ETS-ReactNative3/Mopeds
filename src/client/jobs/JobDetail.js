@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { withRouter } from "react-router-dom";
 import { API } from '../App';
 import SectionHeader from '../components/SectionHeader';
 import PartForm from '../parts/PartForm';
@@ -126,9 +125,7 @@ export default class JobDetail extends Component {
   }
 
   render() {
-    console.log('render');
     const { data, isLoading, parts, showEdit, showPartForm, tasks } = this.state;
-    console.log(parts && parts.length);
     return (
       <div className={isLoading ? 'loading' : ''}>
         {data &&

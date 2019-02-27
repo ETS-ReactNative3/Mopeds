@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-// import { withRouter } from "react-router-dom";
 import { API } from '../App';
 import SectionHeader from '../components/SectionHeader';
 import TextInput from '../components/form/TextInput';
 import Select from '../components/form/Select';
-
-const states = ["AZ", "CO", "NM", "UT"];
+import { US_STATES } from '../Utils';
 
 export default class CustomerForm extends Component {
 
@@ -93,18 +91,18 @@ export default class CustomerForm extends Component {
           <SectionHeader title='Add Customer' hasBack={true} />
         }
         <div className="row">
-          <form className="col-md-11 mx-auto" onSubmit={event => this.handleSubmit(event)} onChange={event => this.handleChange(event)}>
+          <form className="col-md-11 mx-auto" onSubmit={event => this.handleSubmit(event)}>
             <div className="form-row">
-              <TextInput label="First Name" name="custFirstName" className="col-md-6" value={custFirstName} />
-              <TextInput label="Last Name" name="custLastName" className="col-md-6" value={custLastName} />
+              <TextInput label="First Name" name="custFirstName" className="col-md-6" value={custFirstName} onChange={event => this.handleChange(event)} />
+              <TextInput label="Last Name" name="custLastName" className="col-md-6" value={custLastName} onChange={event => this.handleChange(event)} />
             </div>
             <div className="form-group">
-              <TextInput label="Address" name="custAddress" placeholder="123 Main St" value={custAddress} />
+              <TextInput label="Address" name="custAddress" placeholder="123 Main St" value={custAddress} onChange={event => this.handleChange(event)} />
             </div>
             <div className="form-row">
-              <TextInput label="City" name="custCity" className="col-md-6" value={custCity} />
-              <Select label="State" name="custState" className="col-md-4" options={states} value={custState} />
-              <TextInput label="ZIP" name="custZip" className="col-md-2" placeholder="01234" value={custZip} />
+              <TextInput label="City" name="custCity" className="col-md-6" value={custCity} onChange={event => this.handleChange(event)} />
+              <Select label="State" name="custState" className="col-md-4" options={US_STATES} value={custState} onChange={event => this.handleChange(event)} />
+              <TextInput label="ZIP" name="custZip" className="col-md-2" placeholder="01234" value={custZip} onChange={event => this.handleChange(event)} />
             </div>
             <div className="button-group">
               <button type="submit" className="btn btn-primary">{customer ? 'Save' : 'Add'}</button>

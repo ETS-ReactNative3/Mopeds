@@ -96,7 +96,7 @@ export default class MopedTable extends Component {
 
   MopedTablePager = () => {
     const { config } = this.props;
-    const { data, currentPage, tableCount } = this.state;
+    const { data, currentPage = 1, tableCount } = this.state;
     const pageCount = Math.ceil(data.length / tableCount);
     const pageIndexes = [...Array(pageCount).keys()];
     const changePage = (page, event) => {
@@ -110,18 +110,18 @@ export default class MopedTable extends Component {
             <ul className="pagination justify-content-center">
               {currentPage !== 1 &&
                 <li className="page-item">
-                  <a className="page-link" href="#" aria-label="Previous" onClick={(e) => changePage(currentPage - 1, e)}>
+                  <a className="page-link" href="#" aria-label="Previous" onClick={(e) => changePage(1, e)}>
                     <span aria-hidden="true">&laquo;</span>
                     <span className="sr-only">Previous</span>
                   </a>
                 </li>
               }
               {pageIndexes.map((n, i) => {
-                return (<li className="page-item" key={i}><a className="page-link" href="#" onClick={(e) => changePage(i + 1, e)}>{i + 1}</a></li>)
+                return (<li className={`page-item ${currentPage === i + 1 ? 'active' : ''}`} key={i}><a className="page-link" href="#" onClick={(e) => changePage(i + 1, e)}>{i + 1}</a></li>)
               })}
               {currentPage !== pageCount &&
                 <li className="page-item">
-                  <a className="page-link" href="#" aria-label="Next" onClick={(e) => changePage(currentPage + 1, e)}>
+                  <a className="page-link" href="#" aria-label="Next" onClick={(e) => changePage(pageCount, e)}>
                     <span aria-hidden="true">&raquo;</span>
                     <span className="sr-only">Next</span>
                   </a>

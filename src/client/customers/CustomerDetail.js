@@ -14,12 +14,6 @@ export default class CustomerDetail extends Component {
     },
     rowClick: (job) => this.jobClick(job),
     columns: [
-      /*
-      {
-        key: 'idCustomers',
-        title: 'Customer ID'
-      },
-      */
       {
         key: 'idJobs',
         title: 'Job ID'

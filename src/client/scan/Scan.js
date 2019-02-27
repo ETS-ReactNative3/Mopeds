@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from "react-router-dom";
 import { API } from '../App';
 import SectionHeader from '../components/SectionHeader';
 import QrScanner from '../components/qr-scanner/qr-scanner.min';
