@@ -6,9 +6,13 @@ export default class MopedTable extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      data: this.props.data
-    };
+    const stateData = { data: this.props.data };
+    if (props.config.pageRows) {
+      stateData.tableCount = props.config.pageRows;
+      stateData.isPager = true;
+    }
+
+    this.state = stateData;
   }
 
   searchInput = event => {
@@ -99,7 +103,7 @@ export default class MopedTable extends Component {
       event.preventDefault();
       this.setState({ currentPage: page });
     }
-    return (
+    return (pageCount && pageCount > 1 &&
       <tfoot>
         <tr className="pagerNavRow"><td colSpan={config.columns.length}>
           <nav aria-label="Table pagination">
@@ -183,7 +187,7 @@ export default class MopedTable extends Component {
             <tr><td colSpan={config.columns.length}>{config.text && config.text.noResults ? config.text.noResults : 'No Data'}</td></tr>
           }
         </tbody>
-        {config.pager && isPager &&
+        {hasResults && isPager &&
           <this.MopedTablePager />
         }
       </table>

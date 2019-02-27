@@ -12,7 +12,7 @@ export default class CustomerDetail extends Component {
     text: {
       noResults: "No Jobs Found"
     },
-    // rowClick: (customer) => this.customerClick(customer),
+    rowClick: (job) => this.jobClick(job),
     columns: [
       /*
       {
@@ -98,6 +98,10 @@ export default class CustomerDetail extends Component {
   doneCustomerForm() {
     this.getCustomer();
     this.editCustomerForm();
+  }
+
+  jobClick(job) {
+    this.props.history.push(`/jobs/${job.idJobs}`)
   }
 
   render() {

@@ -12,45 +12,33 @@ export default class JobDetail extends Component {
     text: {
       noResults: "No Parts Found"
     },
-    pager: true,
+    pageRows: 5,
     // rowClick: (part) => this.partClick(part),
     columns: [
-      {
-        key: 'idParts',
-        title: 'Part ID'
-      },
-      {
-        key: 'idPerson',
-        title: 'Person ID'
-      },
-      {
-        key: 'vendor',
-        title: 'Vendor'
-      },
-      {
-        key: 'price',
-        title: 'Price'
-      },
-      {
-        key: 'quantity',
-        title: 'Quantity'
-      },
-      {
-        key: 'status',
-        title: 'Status'
-      },
-      {
-        key: 'dateCreated',
-        title: 'Date Created'
-      },
-      {
-        key: 'dateUpdated',
-        title: 'Date Updated'
-      },
-      {
-        key: 'orderNumber',
-        title: 'Order Number'
-      }
+      { key: 'idParts', title: 'Part ID' },
+      { key: 'idPerson', title: 'Person ID' },
+      { key: 'vendor', title: 'Vendor' },
+      { key: 'price', title: 'Price' },
+      { key: 'quantity', title: 'Quantity' },
+      { key: 'status', title: 'Status' },
+      { key: 'dateCreated', title: 'Date Created' },
+      { key: 'dateUpdated', title: 'Date Updated' },
+      { key: 'orderNumber', title: 'Order Number' }
+    ]
+  };
+  tasksTableConfig = {
+    tableHeader: true,
+    text: {
+      noResults: "No Tasks Found"
+    },
+    pageRows: 5,
+    // rowClick: (part) => this.partClick(part),
+    columns: [
+      { key: 'idTasks', title: 'Task ID' },
+      { key: 'idPerson', title: 'Person ID' },
+      { key: 'startDate', title: 'Start Date' },
+      { key: 'endDate', title: 'End Date' },
+      { key: 'comments', title: 'Comments' }
     ]
   };
 
@@ -66,7 +54,7 @@ export default class JobDetail extends Component {
   renderJob() {
     this.getJob();
     this.getJobParts();
-    // this.getJobComments();
+    this.getJobTasks();
   }
 
   getJob() {
@@ -102,6 +90,22 @@ export default class JobDetail extends Component {
       .catch(error => this.setState({ error, isLoading: false }));
   }
 
+  getJobTasks() {
+    this.setState({ isLoading: true });
+    fetch(`${API}/tasksByJob?jobId=${this.jobId}`)
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Something went wrong ...');
+        }
+      })
+      .then(data => {
+        this.setState({ tasks: data, isLoading: false });
+      })
+      .catch(error => this.setState({ error, isLoading: false }));
+  }
+
   convertJobSql(data) {
     return {
       customerId: data[0].idCustomers,
@@ -118,14 +122,13 @@ export default class JobDetail extends Component {
   }
 
   render() {
-    const { data, isLoading, parts, showEdit } = this.state;
+    const { data, isLoading, parts, showEdit, tasks } = this.state;
     return (
       <div className={isLoading ? 'loading' : ''}>
         {data &&
           <SectionHeader
             title={`Job ${this.jobId}`}
             hasBack={true}
-            button={{ action: () => this.editJobForm(), title: "Edit Job" }}
           />
         }
         {data && !showEdit &&
@@ -136,6 +139,14 @@ export default class JobDetail extends Component {
                 <div className="col-md-12">
                   <SectionHeader title="Parts" sectionLevel="2" />
                   <MopedTable data={parts} config={this.partsTableConfig} />
+                </div>
+              </div>
+            }
+            {tasks &&
+              <div className="row mt-5">
+                <div className="col-md-12">
+                  <SectionHeader title="Tasks" sectionLevel="2" />
+                  <MopedTable data={tasks} config={this.tasksTableConfig} />
                 </div>
               </div>
             }

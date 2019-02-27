@@ -252,6 +252,17 @@ app.get('/api/partsByJob', (req, res) => {
   });
 });
 
+// /api/tasksByJob?jobId=1
+app.get('/api/tasksByJob', (req, res) => {
+  const id = req.query.jobId;
+  const sql = `SELECT * FROM tasks WHERE idJobs = ${mysql.escape(id)}`;
+  // eslint-disable-next-line func-names
+  con.query(sql, (err, result) => {
+    if (err) throw err;
+    res.end(JSON.stringify(result));
+  });
+});
+
 app.post('/addTask', function (req, res) {
   const jId = req.body.jobId;
   const pId = req.body.personId;
