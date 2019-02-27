@@ -116,12 +116,12 @@ app.get('/api/jobsByCustomer', (req, res) => {
 });
 
 app.post('/api/addCustomer', (req, res) => {
-  const custLN = req.query.custLastName;
-  const custFN = req.query.custFirstName;
-  const custA = req.query.custAddress;
-  const custC = req.query.custCity;
-  const custS = req.query.custState;
-  const custZ = req.query.custZip;
+  const custLN = req.body.custLastName;
+  const custFN = req.body.custFirstName;
+  const custA = req.body.custAddress;
+  const custC = req.body.custCity;
+  const custS = req.body.custState;
+  const custZ = req.body.custZip;
   const sql = `${'INSERT INTO CUSTOMERS '
     + ' (idC, nameLast, '
     + ' nameFirst, '
@@ -142,15 +142,15 @@ app.post('/api/addCustomer', (req, res) => {
   });
 });
 
-app.post('/api/editCustomer', (req, res) => {
+app.put('/api/editCustomer', (req, res) => {
   // accept update to customer
-  const custId = req.query.customerId;
-  const custLN = req.query.custLastName;
-  const custFN = req.query.custFirstName;
-  const custAddr = req.query.custAddress;
-  const custCity = req.query.custCity;
-  const custState = req.query.custState;
-  const custZip = req.query.custZip;
+  const custId = req.body.customerId;
+  const custLN = req.body.custLastName;
+  const custFN = req.body.custFirstName;
+  const custAddr = req.body.custAddress;
+  const custCity = req.body.custCity;
+  const custState = req.body.custState;
+  const custZip = req.body.custZip;
   const sql = `${'UPDATE CUSTOMERS SET '
     + ' nameFirst = '}${mysql.escape(custFN)
     }, nameLast = ${mysql.escape(custLN)
