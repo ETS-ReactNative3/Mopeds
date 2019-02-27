@@ -97,6 +97,13 @@ export default class JobDetail extends Component {
     }
   }
 
+  addPartForm() {
+    if (this.state.part) {
+      this.showPartForm();
+      this.setState({ part: undefined });
+    }
+    setTimeout(() => this.showPartForm(), 1);
+  }
   showPartForm() {
     this.setState({ showPartForm: !this.state.showPartForm });
   }
@@ -121,7 +128,7 @@ export default class JobDetail extends Component {
             {parts &&
               <div className="row mt-4">
                 <div className="col-md-12">
-                  <SectionHeader title="Parts" sectionLevel="2" button={{ action: () => this.showPartForm(), title: "Add Part" }} />
+                  <SectionHeader title="Parts" sectionLevel="2" button={{ action: () => this.addPartForm(), title: "Add Part" }} />
                   {!showPartForm &&
                     <MopedTable data={parts} config={this.partsTableConfig} />
                   }

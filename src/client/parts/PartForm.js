@@ -54,6 +54,10 @@ export default class PartForm extends Component {
     this.props.history.push(`/customers`)
   }
 
+  deleteFunc() {
+    alert('delete!?');
+  }
+
   doneFunc() {
     if (this.props.doneFunc) {
       this.props.doneFunc();
@@ -67,9 +71,7 @@ export default class PartForm extends Component {
     const { isLoading, vendor, price, quantity } = this.state;
     return (
       <div className={isLoading ? 'loading' : ''}>
-        {!part &&
-          <SectionHeader title='Add Part' sectionLevel='3' />
-        }
+        <SectionHeader title={part ? 'Edit Part' : 'Add Part'} sectionLevel='3' />
         <div className="row">
           <form className="col-md-11 mx-auto" onSubmit={event => this.handleSubmit(event)}>
             <div className="form-row">
@@ -83,6 +85,9 @@ export default class PartForm extends Component {
               <button type="submit" className="btn btn-primary">{part ? 'Save' : 'Add'}</button>
               {cancelFunc &&
                 <button type="button" className="btn btn-secondary" onClick={() => cancelFunc()}>Cancel</button>
+              }
+              {part &&
+                <button type="button" className="btn btn-danger btn-right" onClick={() => this.deleteFunc()}>Delete Part</button>
               }
             </div>
           </form>

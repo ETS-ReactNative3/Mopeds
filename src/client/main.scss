@@ -102,19 +102,25 @@ p.form-control-plaintext {
 
 /* Buttons */
 .button-group {
+  display: flex;
   margin-top: 1em;
   button {
     margin-right: 1em;
+    &.btn-right {
+      margin-left: auto;
+      margin-right: 0;
+    }
   }
 }
 
 @media (max-width: 576px) {
   .button-group {
+    flex-direction: column;
     margin-bottom: 1em;
     button {
       width: 100%;
       margin: .4em 0 0;
-      }
+    }
   }
 }
 
