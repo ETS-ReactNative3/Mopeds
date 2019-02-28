@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { HashRouter, Route, NavLink } from "react-router-dom";
+import { HashRouter, Route, NavLink } from 'react-router-dom';
 import 'bootstrap';
 import $ from 'jquery';
 import './main.scss';
@@ -9,6 +9,8 @@ import CustomerDetail from './customers/CustomerDetail';
 import Jobs from './jobs/Jobs';
 import JobDetail from './jobs/JobDetail';
 import Scan from './scan/Scan';
+import Reports from './reports/Reports';
+import ReportDetail from './reports/ReportDetail';
 
 export default class App extends Component {
 
@@ -33,13 +35,16 @@ export default class App extends Component {
                 <div className="collapse navbar-collapse" id="navbarCollapse">
                   <ul className="navbar-nav mr-auto">
                     <li className="nav-item">
-                      <NavLink to="/customers" className="nav-link" activeClassName="active">Customers</NavLink>
-                    </li>
-                    <li className="nav-item">
                       <NavLink to="/jobs" className="nav-link" activeClassName="active">Jobs</NavLink>
                     </li>
                     <li className="nav-item">
+                      <NavLink to="/customers" className="nav-link" activeClassName="active">Customers</NavLink>
+                    </li>
+                    <li className="nav-item">
                       <NavLink to="/scan" className="nav-link" activeClassName="active">Scan</NavLink>
+                    </li>
+                    <li className="nav-item">
+                      <NavLink to="/reports" className="nav-link" activeClassName="active">Reports</NavLink>
                     </li>
                   </ul>
                 </div>
@@ -53,6 +58,8 @@ export default class App extends Component {
               <Route exact path="/jobs/:jobId(\d+)" component={JobDetail} />
               <Route exact path="/jobs" component={Jobs} />
               <Route exact path="/scan" component={Scan} />
+              <Route exact path="/reports" component={Reports} />
+              <Route exact path="/reports/:reportDate([a-z0-9-]+)" component={ReportDetail} />
             </div>
           </div>
           <footer className="footer mt-auto py-1 bg-dark">

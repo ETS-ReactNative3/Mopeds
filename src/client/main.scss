@@ -107,7 +107,7 @@ p.form-control-plaintext {
 .button-group {
   display: flex;
   margin-top: 1em;
-  button {
+  .btn {
     margin-right: 1em;
     &.btn-right {
       margin-left: auto;
@@ -120,7 +120,7 @@ p.form-control-plaintext {
   .button-group {
     flex-direction: column;
     margin-bottom: 1em;
-    button {
+    .btn {
       width: 100%;
       margin: .4em 0 0;
     }
@@ -132,4 +132,31 @@ p.form-control-plaintext {
   width: 100%;
   max-width: 100%;
   max-height: 100%;
+}
+
+/* Reports */
+.report-calendar {
+  .report-calendar-header {
+    .controls {
+      display: flex;
+      width: 15em;
+      .title {
+        font-size: 1.1em;
+        flex: 1 0 auto;
+        white-space: nowrap;
+      }
+    }
+  }
+  .report-day {
+    height: 4em;
+    padding: .4em .6em;
+    margin: 2px;
+    &.active {
+      background-color: rgba(0, 0, 0, 0.02);
+      &:hover {
+        cursor: pointer;
+        background-color: rgba(0, 80, 175, 0.05);
+      }
+    }
+  }
 }

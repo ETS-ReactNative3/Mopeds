@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { API } from '../App';
 import SectionHeader from '../components/SectionHeader';
 import MopedTable from '../components/MopedTable';
 import { mopedGET } from '../Utils';
@@ -57,7 +56,7 @@ export default class Jobs extends Component {
   }
 
   render() {
-    const { data, isLoading, name, showForm } = this.state;
+    const { data, isLoading } = this.state;
     return (
       <div className={isLoading ? 'loading' : ''}>
         <SectionHeader title="Jobs" />

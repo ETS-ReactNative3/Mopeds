@@ -11,11 +11,12 @@ class SectionHeader extends Component {
   }
 
   render() {
-    const { title, hasBack = false, button, sectionLevel = '1' } = this.props;
+    const { title, hasBack = false, button, sectionLevel = '1', className = undefined } = this.props;
     const HeaderLevel = `h${sectionLevel}`;
+    const classString = `section-header mb-2 ${className}`;
     const headerClass = button ? button.type === 'close' ? 'col-sm-11' : 'col-sm-8 col-md-9' : 'col-sm-12';
     return (
-      <div className="section-header mb-2">
+      <div className={classString}>
         <div className="row">
           <div className={headerClass}>
             <HeaderLevel>
