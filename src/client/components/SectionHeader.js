@@ -11,7 +11,7 @@ class SectionHeader extends Component {
   }
 
   render() {
-    const { title, hasBack = false, button, sectionLevel = '1', className = undefined } = this.props;
+    const { title, hasBack = false, button, sectionLevel = '1', className = '' } = this.props;
     const HeaderLevel = `h${sectionLevel}`;
     const classString = `section-header mb-2 ${className}`;
     const headerClass = button ? button.type === 'close' ? 'col-sm-11' : 'col-sm-8 col-md-9' : 'col-sm-12';
@@ -35,7 +35,7 @@ class SectionHeader extends Component {
           }
           {button && button.type === 'close' &&
             <div className="header-button col-sm-1">
-              <button type="button" class="close" aria-label="Close" onClick={button.action}>
+              <button type="button" className="close" aria-label="Close" onClick={button.action}>
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>

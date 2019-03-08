@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { API } from '../App';
 import SectionHeader from '../components/SectionHeader';
 import TextInput from '../components/form/TextInput';
 import Select from '../components/form/Select';
