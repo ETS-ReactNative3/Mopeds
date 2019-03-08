@@ -28,7 +28,7 @@ export default class PartForm extends Component {
     event.preventDefault();
     const body = {
       jobId: this.props.jobId,
-      personId: this.props.personId
+      personId: this.props.idPerson
     };
     const action = this.props.part ? '/editPart' : '/addPartToJob';
     const mopedMethod = this.props.part ? mopedPUT : mopedPOST;

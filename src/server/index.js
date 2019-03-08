@@ -234,10 +234,10 @@ app.put('/api/editPart', (req, res) => {
   });
 });
 
-app.post('/addJob', function (req, res) {
-  const cId = req.body.custId;
-  const jDesc = req.body.jobDesc;
-  const pId = req.body.personId;
+app.post('/api/addJob', function (req, res) {
+  const cId = req.body.customerId;
+  const jDesc = req.body.description;
+  const pId = req.body.idPerson;
 
   const sql = "INSERT INTO JOBS " +
     " (idCustomers, " +
@@ -253,6 +253,25 @@ app.post('/addJob', function (req, res) {
     res.end(JSON.stringify(result));
   });
 });
+
+app.put('/api/editJob', (req, res) => {
+  const cId = req.body.customerId;
+  const jDesc = req.body.description;
+  const pId = req.body.idPerson;
+  const idJobs = req.body.idJobs;
+
+  const sql = `${'UPDATE JOBS SET '
+    + ' idCustomers = '}${mysql.escape(cId)
+    }, description = ${mysql.escape(jDesc)
+    }, idPerson = ${mysql.escape(pId)
+    } WHERE IDJOBS = ${
+    mysql.escape(idJobs)}`;
+  con.query(sql, (err, result) => {
+    if (err) throw err;
+    res.end(JSON.stringify(result));
+  });
+});
+
 
 // /api/partsByJob?jobId=1
 app.get('/api/partsByJob', (req, res) => {

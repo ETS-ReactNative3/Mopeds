@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { API } from '../App';
 import SectionHeader from '../components/SectionHeader';
 import CustomerForm from './CustomerForm';
+import JobForm from '../jobs/JobForm';
 import MopedTable from '../components/MopedTable';
 import { mopedGET } from '../Utils';
 
@@ -32,6 +32,7 @@ export default class CustomerDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      showAddJob: false,
       showEdit: false
     };
   }
@@ -80,12 +81,20 @@ export default class CustomerDetail extends Component {
     this.editCustomerForm();
   }
 
+  addJobForm() {
+    this.setState({ showAddJob: !this.state.showAddJob });
+  }
+  doneJobForm() {
+    this.getCustomerJobs();
+    this.addJobForm();
+  }
+
   jobClick(job) {
     this.props.history.push(`/jobs/${job.idJobs}`)
   }
 
   render() {
-    const { data, isLoading, jobs, showEdit } = this.state;
+    const { data, isLoading, jobs, showEdit, showAddJob } = this.state;
     return (
       <div className={isLoading ? 'loading' : ''}>
         {data &&
@@ -101,8 +110,13 @@ export default class CustomerDetail extends Component {
               {jobs &&
                 <div className="row mt-4">
                   <div className="col-md-12">
-                    <SectionHeader title="Jobs" sectionLevel="2" />
-                    <MopedTable data={jobs} config={this.jobsTableConfig} />
+                    <SectionHeader title="Jobs" sectionLevel="2" button={{ action: () => this.addJobForm(), title: "Add Job" }} />
+                    {!showAddJob &&
+                      <MopedTable data={jobs} config={this.jobsTableConfig} />
+                    }
+                    {showAddJob &&
+                      <JobForm customerId={this.customerId} cancelFunc={() => this.addJobForm()} doneFunc={() => this.doneJobForm()} />
+                    }
                   </div>
                 </div>
               }

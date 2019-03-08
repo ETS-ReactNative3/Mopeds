@@ -11,6 +11,7 @@ import JobDetail from './jobs/JobDetail';
 import Scan from './scan/Scan';
 import Reports from './reports/Reports';
 import ReportDetail from './reports/ReportDetail';
+import JobForm from './jobs/JobForm';
 
 export default class App extends Component {
 
@@ -57,6 +58,7 @@ export default class App extends Component {
               <Route exact path="/customers" component={Customers} />
               <Route exact path="/jobs/:jobId(\d+)" component={JobDetail} />
               <Route exact path="/jobs" component={Jobs} />
+              <Route exact path="/jobs/add" component={JobForm} />
               <Route exact path="/scan" component={Scan} />
               <Route exact path="/reports" component={Reports} />
               <Route exact path="/reports/:reportDate([a-z0-9-]+)" component={ReportDetail} />

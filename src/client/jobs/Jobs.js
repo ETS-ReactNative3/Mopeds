@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import SectionHeader from '../components/SectionHeader';
 import MopedTable from '../components/MopedTable';
+import JobForm from './JobForm';
 import { mopedGET } from '../Utils';
 
 export default class Jobs extends Component {
@@ -35,9 +36,7 @@ export default class Jobs extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      showForm: false
-    };
+    this.state = {};
   }
 
   componentDidMount() {
@@ -55,11 +54,15 @@ export default class Jobs extends Component {
     this.props.history.push(`/jobs/${job.idJobs}`)
   }
 
+  addJobForm() {
+    this.props.history.push('/jobs/add');
+  }
+
   render() {
     const { data, isLoading } = this.state;
     return (
       <div className={isLoading ? 'loading' : ''}>
-        <SectionHeader title="Jobs" />
+        <SectionHeader title="Jobs" button={{ action: () => this.addJobForm(), title: "Add Job" }} />
         {data &&
           <MopedTable data={data} config={this.jobsTableConfig} />
         }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import SectionHeader from '../components/SectionHeader';
 import PartForm from '../parts/PartForm';
+import JobForm from '../jobs/JobForm';
 import MopedTable from '../components/MopedTable';
 import { mopedGET } from '../Utils';
 
@@ -93,8 +94,17 @@ export default class JobDetail extends Component {
     return {
       customerId: data[0].idCustomers,
       description: data[0].description,
-      personId: data[0].idPerson
+      idPerson: data[0].idPerson,
+      idJobs: data[0].idJobs
     }
+  }
+
+  editJobForm() {
+    this.setState({ showEdit: !this.state.showEdit });
+  }
+  doneJobForm() {
+    this.getJob();
+    this.editJobForm();
   }
 
   addPartForm() {
@@ -111,7 +121,7 @@ export default class JobDetail extends Component {
     this.showPartForm();
     this.setState({ part: undefined });
   }
-  doneJobForm() {
+  donePartForm() {
     this.showPartForm();
     this.getJobParts();
   }
@@ -121,7 +131,10 @@ export default class JobDetail extends Component {
     return (
       <div className={isLoading ? 'loading' : ''}>
         {data &&
-          <SectionHeader title={`Job ${this.jobId}`} />
+          <SectionHeader
+            title={`Job ${this.jobId}`}
+            button={!showPartForm ? { action: () => this.editJobForm(), title: "Edit Job" } : undefined}
+          />
         }
         {data && !showEdit &&
           <div className="row">
@@ -130,12 +143,12 @@ export default class JobDetail extends Component {
               {parts &&
                 <div className="row mt-4">
                   <div className="col-md-12">
-                    <SectionHeader title="Parts" sectionLevel="2" button={{ action: () => this.addPartForm(), title: "Add Part" }} />
+                    <SectionHeader title="Parts" sectionLevel="2" button={!(showPartForm && part) ? { action: () => this.addPartForm(), title: "Add Part" } : undefined} />
                     {!showPartForm &&
                       <MopedTable data={parts} config={this.partsTableConfig} />
                     }
                     {showPartForm &&
-                      <PartForm jobId={this.jobId} part={part} personId='1' cancelFunc={() => this.hideEditForm()} doneFunc={() => this.doneJobForm()} />
+                      <PartForm jobId={this.jobId} part={part} idPerson='1' cancelFunc={() => this.hideEditForm()} doneFunc={() => this.donePartForm()} />
                     }
                   </div>
                 </div>
@@ -150,6 +163,9 @@ export default class JobDetail extends Component {
               }
             </div>
           </div>
+        }
+        {data && showEdit &&
+          <JobForm job={data} cancelFunc={() => this.editJobForm()} doneFunc={() => this.doneJobForm()} />
         }
       </div>
     );
