@@ -11,7 +11,6 @@ export default class Reports extends Component {
   }
 
   handleCalendarClick(date) {
-    console.log('handleCalendarClick ', date);
     this.props.history.push(`/reports/${date}`)
   }
 

@@ -26,6 +26,9 @@ export function formatMoney(amount, thousands = ",") {
     console.warn(e)
   }
 }
+export function pad2digits(num) {
+  return (parseInt(num) > 9 ? '' : '0') + num;
+}
 
 /* REST communications */
 function mopedREST(method, options) {

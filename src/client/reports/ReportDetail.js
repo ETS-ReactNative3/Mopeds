@@ -3,8 +3,6 @@ import SectionHeader from '../components/SectionHeader';
 import { mopedGET, TIME_ZONE } from '../Utils';
 
 export default class ReportDetail extends Component {
-  today = new Date();
-  yesterday = new Date((new Date()).setDate(this.today.getDate() - 1));
 
   constructor(props) {
     super(props);
@@ -18,13 +16,14 @@ export default class ReportDetail extends Component {
 
   parseReportDate(date) {
     let resultDate;
-    if (date === 'today' || date === 'yesterday') {
-      const dateObj = date === 'today' ? this.today : this.yesterday;
+    if (date === 'today' || date === 'yesterday') { // parse date shortcuts
+      const today = new Date();
+      const dateObj = date === 'today' ? today : new Date((new Date()).setDate(today.getDate() - 1));
       resultDate = dateObj.toLocaleString(undefined, { timeZone: TIME_ZONE, year: 'numeric', month: '2-digit', day: '2-digit' });
       this.setState({ displayDate: resultDate });
       const dateArray = resultDate.split('/');
       return `${dateArray[2]}${dateArray[0]}${dateArray[1]}`;
-    } else {
+    } else { // parse dates
       const dateArray = date.split(/-|\./);
       this.setState({ displayDate: `${dateArray[1]}/${dateArray[2]}/${dateArray[0]}` });
       return date.replace(/-|\./g, '');
@@ -34,9 +33,9 @@ export default class ReportDetail extends Component {
   render() {
     const { displayDate, isLoading } = this.state;
     return (
-      <div className={isLoading ? 'loading' : ''}>
+      <div>
         <SectionHeader title={`Report ${displayDate}`} />
-        <div className="row">
+        <div className={isLoading ? 'row loading' : 'row'}>
           <div className="button-group col-sm">
 
           </div>

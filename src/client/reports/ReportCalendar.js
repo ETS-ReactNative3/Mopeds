@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { pad2digits } from '../Utils';
 
 export default class ReportCalendar extends Component {
   today = new Date();
@@ -16,7 +17,8 @@ export default class ReportCalendar extends Component {
 
   handleClick(event) {
     const { month, year } = this.state;
-    this.props.onClick(`${year}-${month + 1}-${event.target.id}`)
+    const dateString = `${year}-${pad2digits(month + 1)}-${pad2digits(event.target.id)}`;
+    this.props.onClick(dateString);
   }
 
   changeMonth(delta) {
@@ -60,7 +62,12 @@ export default class ReportCalendar extends Component {
                   const hasData = !(isCurrentMonth && dayNumber > this.today.getDate()) && !isFutureMonth;
                   const isActive = hasData ? ' active' : '';
                   return (
-                    <div id={dayNumber} key={day} className={`col-sm report-day${isActive}`} onClick={hasData ? event => this.handleClick(event) : undefined}>{dayNumber}</div>
+                    <div
+                      id={dayNumber}
+                      key={day}
+                      className={`col-sm report-day${isActive}`}
+                      onClick={hasData ? event => this.handleClick(event) : undefined}
+                    >{dayNumber}</div>
                   )
                 }
               })}
